@@ -21,7 +21,8 @@ namespace API
                 {
                     var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
-                    // Seed.SeedData(context);
+                    //if our db is empty, it will be seeded with data from Seed.cs
+                    Seed.SeedData(context);
                 }
                 catch (Exception ex)
                 {
