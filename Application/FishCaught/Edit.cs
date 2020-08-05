@@ -16,6 +16,8 @@ namespace Application.FishCaught
             public int? GuideId { get; set; }
             public int? OrganizationId { get; set; }
             public int? FishTypeId { get; set; }
+            public float? Length { get; set; }
+            public float? Weight { get; set; }
             public bool? ExceptionalCatch { get; set; }
             public bool? UnusualCatch { get; set; }
             public float? Latitude { get; set; }
@@ -54,6 +56,8 @@ namespace Application.FishCaught
                 fish.GuideId = request.GuideId ?? fish.GuideId;
                 fish.OrganizationId = request.OrganizationId ?? fish.OrganizationId;
                 fish.FishTypeId = request.FishTypeId ?? fish.FishTypeId;
+                fish.Length = request.Length ?? fish.Length;
+                fish.Weight = request.Weight ?? fish.Weight;
                 fish.ExceptionalCatch = request.ExceptionalCatch ?? fish.ExceptionalCatch;
                 fish.UnusualCatch = request.UnusualCatch ?? fish.UnusualCatch;
                 fish.Latitude = request.Latitude ?? fish.Latitude;

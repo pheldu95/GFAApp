@@ -9,8 +9,8 @@ namespace Domain
         public int GuideId { get; set; }
         public int OrganizationId { get; set; }
         public int FishTypeId { get; set; }
-        // public float Length { get; set; }
-        // public float Weight { get; set; }
+        public float Length { get; set; }
+        public float Weight { get; set; }
         public bool ExceptionalCatch { get; set; }
         public bool UnusualCatch { get; set; }
         public float Latitude { get; set; }
