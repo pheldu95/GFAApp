@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200730171113_added FishTypeId")]
+    partial class addedFishTypeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +42,7 @@ namespace Persistence.Migrations
                     b.Property<int>("GuideId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastModifiedDate")
+                    b.Property<DateTime>("LastModifedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<float>("Latitude")
