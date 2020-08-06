@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
-import { Header, Icon, List} from 'semantic-ui-react';
+import { Header, Icon, List, Container} from 'semantic-ui-react';
 import { IFish } from '../models/fish';
+import { NavBar } from '../../features/nav/NavBar';
+import { FishCaughtDashboard } from '../../features/fishCaught/dashboard/FishCaughtDashboard';
 
 
 
@@ -32,18 +34,12 @@ const App = () => {
    
   // }
   return (
-    <div>
-    <Header as="h2" icon>
-      <Icon name="home" />
-      Grantsburg Fishing Association
-      
-    </Header>
-      <List>
-        {fishCaught.map((fish) => (
-          <List.Item key={fish.id}>{fish.latitude}, {fish.longitude}</List.Item>
-        ))}
-      </List>
-    </div>
+    <Fragment>
+      <NavBar/>
+      <Container style={{marginTop: '7em'}}>
+        <FishCaughtDashboard fishCaught={fishCaught}/>
+      </Container>
+    </Fragment>
   );
 }
 
