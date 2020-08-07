@@ -5,6 +5,8 @@ export interface IFish{
     guideId: number;
     organizationId: number;
     fishTypeId: number;
+    length: number;
+    weight: number;
     exceptionalCatch: boolean;
     unusualCatch: boolean;
     latitude: number;

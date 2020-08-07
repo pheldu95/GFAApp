@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Header, Icon, List, Container} from 'semantic-ui-react';
 import { IFish } from '../models/fish';
 import { NavBar } from '../../features/nav/NavBar';
-import { FishCaughtDashboard } from '../../features/fishCaught/dashboard/FishCaughtDashboard';
+import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtDashboard';
 
 
 
