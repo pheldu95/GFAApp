@@ -18,6 +18,6 @@ export interface IFish{
     moonIlluminationPercent: number;
     airTemperature: number;
     waterTemperature: number;
-    caughtDate: Date;
-    lastModifiedDate: Date;
+    caughtDate: string;
+    lastModifiedDate: string;
 }

@@ -1,7 +1,12 @@
 import React from 'react'
 import { Menu, Container, Button } from 'semantic-ui-react'
 
-export const NavBar = () => {
+interface IProps{
+    //will be receiving a function that takes no parameters and returns void, called openCreateForm
+    openCreateForm: () => void;
+}
+
+export const NavBar: React.FC<IProps> = ({openCreateForm}) => {
     return (
         <Menu fixed='top' inverted style={{backgroundColor: '#228b22'}}>
             <Container>
@@ -13,7 +18,7 @@ export const NavBar = () => {
                     name='Fish Feed'
                 />
                 <Menu.Item>
-                    <Button positive content='Add Catch'/>
+                    <Button onClick={openCreateForm} positive content='Add Catch'/>
                 </Menu.Item>
             </Container>
         </Menu>
