@@ -17,6 +17,7 @@ const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, creat
         if(initialFormState){
             return initialFormState
         } else{
+            let today = new Date();
             return{
                 id: '',
                 fisherId: 0,
@@ -37,7 +38,7 @@ const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, creat
                 airTemperature: 0,
                 waterTemperature: 0,
                 caughtDate: '',
-                lastModifiedDate: ''
+                lastModifiedDate: '2020-08-14T17:33'
             }
         }
     };
@@ -52,12 +53,14 @@ const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, creat
                 ...fish,
                 id: uuid()
             }
+            console.log(newFish);
+            
             createFish(newFish);
         }else{
             //if the id length is greater than zero, that means we are editing. b/c already has an id
             //so we just pass the fish to editFish
             editFish(fish)
-        }
+        }        
     }
 
     const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        

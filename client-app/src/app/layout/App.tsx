@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import axios from 'axios';
 import {Container} from 'semantic-ui-react';
 import { IFish } from '../models/fish';
 import { NavBar } from '../../features/nav/NavBar';
 import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtDashboard';
 import './styles.css'
+import agent from '../api/agent';
 
 
 const App = () => {
@@ -28,35 +28,44 @@ const App = () => {
   }
 
   const handleCreateFish = (fish: IFish) => {
-    //add the new fish
-    setFishCaught([...fishCaught, fish]);
-    //set the new fish as the selected fish for the details view
-    setSelectedFish(fish);
-    //switch off edit mode so the details view is the only thing shown
-    setEditMode(false);
+    //use agent.ts to add our fish
+    agent.FishCaught.create(fish).then(() => {
+      //add the new fish once we have received acknowledgement that the fish has been sent to the server and db
+      setFishCaught([...fishCaught, fish]);
+      //set the new fish as the selected fish for the details view
+      setSelectedFish(fish);
+      //switch off edit mode so the details view is the only thing shown
+      setEditMode(false);
+    })
   }
 
   const handleEditFish = (fish: IFish) => {
-    //filter out the fish that we have edited, then add the updated version
-    setFishCaught([...fishCaught.filter(f => f.id !== fish.id), fish]);
-    setSelectedFish(fish);
-    setEditMode(false);
+    agent.FishCaught.update(fish).then(() => {
+      //filter out the fish that we have edited, then add the updated version
+      setFishCaught([...fishCaught.filter(f => f.id !== fish.id), fish]);
+      setSelectedFish(fish);
+      setEditMode(false);
+    })
+    
   }
 
   const handleDeleteFish = (id: string) => {
-    //filter out the fish we are deleting
-    setFishCaught([...fishCaught.filter(f => f.id !== id)]);
+    agent.FishCaught.delete(id).then(()=>{
+      //filter out the fish we are deleting
+      setFishCaught([...fishCaught.filter(f => f.id !== id)]);
+    })
+    
   }
   //in functional component, use useEffect instead of componentDidMount
   useEffect(() => {
-  //<IFish[]> tells axios that we are returning an array as the response. of type IFish
-    axios.get<IFish[]>("http://localhost:5000/api/fishCaught")
+    //import our agent.ts file so we can use all our axios requests we made in the FishCaught object
+    agent.FishCaught.list()
     .then((response) => {
       //create an array that we can add our fish once their dates are reformatted
       let fishCaught: IFish[] = [];
       //loop through and reformat date
       //then add the fish to the fishCaught array
-      response.data.forEach(fish => {
+      response.forEach(fish => {
         fish.caughtDate = fish.caughtDate.split('.')[0];
         fishCaught.push(fish);
       })
