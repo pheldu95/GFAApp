@@ -29,3 +29,15 @@ SHould look like this
             "LastModifiedDate");
 
     }
+
+GETTING THE GUID MAKER
+------------------------
+npm install uuid ==> this is used to make guids
+then use: 
+import { v4 as uuid } from "uuid";
+and then: npm install @types/uuid
+then to actually make the guid:
+let newFish = {
+                ...fish,
+                id: uuid();
+            }
