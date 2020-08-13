@@ -38,9 +38,14 @@ const App = () => {
 
   const handleEditFish = (fish: IFish) => {
     //filter out the fish that we have edited, then add the updated version
-    setFishCaught([...fishCaught.filter(f => f.id != fish.id), fish]);
+    setFishCaught([...fishCaught.filter(f => f.id !== fish.id), fish]);
     setSelectedFish(fish);
     setEditMode(false);
+  }
+
+  const handleDeleteFish = (id: string) => {
+    //filter out the fish we are deleting
+    setFishCaught([...fishCaught.filter(f => f.id !== id)]);
   }
   //in functional component, use useEffect instead of componentDidMount
   useEffect(() => {
@@ -74,10 +79,10 @@ const App = () => {
   // }
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm}/>
-      <Container style={{marginTop: '7em'}}>
-        <FishCaughtDashboard 
-          fishCaught={fishCaught} 
+      <NavBar openCreateForm={handleOpenCreateForm} />
+      <Container style={{ marginTop: "7em" }}>
+        <FishCaughtDashboard
+          fishCaught={fishCaught}
           selectFish={handleSelectFish}
           selectedFish={selectedFish}
           editMode={editMode}
@@ -85,6 +90,7 @@ const App = () => {
           setSelectedFish={setSelectedFish}
           createFish={handleCreateFish}
           editFish={handleEditFish}
+          deleteFish={handleDeleteFish}
         />
       </Container>
     </Fragment>
