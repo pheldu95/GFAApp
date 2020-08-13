@@ -1,13 +1,15 @@
 import React, {useState, FormEvent} from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
-import FishCaughtList from '../dashboard/FishCaughtList';
+import { v4 as uuid } from "uuid";
 
 interface IProps{
     setEditMode: (editMode: boolean) => void;
     fish: IFish;
+    createFish: (fish: IFish) => void;
+    editFish: (fish: IFish) => void;
 }
-const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState }) => {
+const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, createFish, editFish }) => {
     //return the fish if there is one to populate the form with
     //if we are creating a new caughtFish, we don't need to populate the form
     //so we just return all the fields but have them be empty
@@ -43,18 +45,33 @@ const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState }) => 
     const[fish, setFish] = useState<IFish>(intializeForm);
 
     const handleSubmit = () =>{
-        console.log(fish);
+        //if the id length is zero, that means it doesnt have an id, and is a new activity
+        //so we add the guid with the spread operator, andf then pass it to createFish
+        if(fish.id.length === 0){
+            let newFish = {
+                ...fish,
+                id: uuid()
+            }
+            createFish(newFish);
+        }else{
+            //if the id length is greater than zero, that means we are editing. b/c already has an id
+            //so we just pass the fish to editFish
+            editFish(fish)
+        }
     }
 
-    const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        
         //event.currentTarget is the same as event.target, except it is for FormEvents, instead of ChangeEvents. We use FormEvent b/c we have a text area for our description
         //destructure event so that we dont have to type out event.currentTarget.name and event.currentTarget.value
         const { name, value } = event.currentTarget;
+        console.log(value);
         //setActiviy is like using this.setState in class components
         setFish({
             ...fish,
             [name]: value
         })
+        console.log(fish);
+        
     }
     return (
         <Segment clearing>
@@ -80,7 +97,7 @@ const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState }) => 
                 <Form.Input onChange={handleInputChange} name='moonIlluminationPercent' placeholder='moonIlluminationPercent' value={fish.moonIlluminationPercent} />
                 <Form.Input onChange={handleInputChange} name='airTemperature' placeholder='airTemperature' value={fish.airTemperature} />
                 <Form.Input onChange={handleInputChange} name='waterTemperature' placeholder='waterTemperature' value={fish.waterTemperature} />
-                <Form.Input onChange={handleInputChange} name='date' type='datetime-local' placeholder='Date' value={fish.caughtDate}/>
+                <Form.Input onChange={handleInputChange} name='caughtDate' type='datetime-local' placeholder='Date' value={fish.caughtDate}/>
                 <Button floated='right' positive type='submit' content='Submit'/>
                 <Button onClick={() => setEditMode(false)} floated='right' type='button' content='Cancel'/>
             </Form>

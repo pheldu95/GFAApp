@@ -16,6 +16,8 @@ interface IProps {
     editMode: boolean;
     setEditMode: (editMode: boolean) => void;
     setSelectedFish: (fish: IFish | null) => void;
+    createFish: (fish: IFish) => void;
+    editFish: (fish: IFish) => void;
 }
 
 //in order to use our IProps interface, we need to give our dashboard a type
@@ -28,34 +30,37 @@ const FishCaughtDashboard: React.FC<IProps> = ({
     selectedFish, 
     editMode, 
     setEditMode, 
-    setSelectedFish 
+    setSelectedFish,
+    createFish,
+    editFish 
 }) => {
     return (
-        <Grid>
-            <Grid.Column width={10}>
-                <FishCaughtList 
-                    fishCaught={fishCaught} 
-                    selectFish={selectFish}
-                />
-                
-            </Grid.Column>
-            <Grid.Column width={6}>
-                {selectedFish && !editMode &&
-                    <FishDetails
-                        fish={selectedFish}
-                        setSelectedFish={setSelectedFish}
-                        setEditMode={setEditMode}
-                    />
-                }
-                {editMode &&
-                    <FishForm 
-                        fish={selectedFish!}
-                        setEditMode={setEditMode}
-                    />
-                }
-            </Grid.Column>
-        </Grid>
-    )
+      <Grid>
+        <Grid.Column width={10}>
+          <FishCaughtList fishCaught={fishCaught} selectFish={selectFish} />
+        </Grid.Column>
+        <Grid.Column width={6}>
+          {selectedFish && !editMode && (
+            <FishDetails
+              fish={selectedFish}
+              setSelectedFish={setSelectedFish}
+              setEditMode={setEditMode}
+            />
+          )}
+          {editMode && (
+            <FishForm
+            //giving the fishform a key because if the key changes, then we will want to rerender the page
+            //so if we are on edit mode, but then the we click Add Catch it will rerender the page with the add catch form instead of the edit mode form
+              key={selectedFish&& selectedFish.id || 0}
+              fish={selectedFish!}
+              setEditMode={setEditMode}
+              createFish={createFish}
+              editFish={editFish}
+            />
+          )}
+        </Grid.Column>
+      </Grid>
+    );
 }
 
 export default FishCaughtDashboard;
