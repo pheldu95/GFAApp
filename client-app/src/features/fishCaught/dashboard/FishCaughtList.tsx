@@ -1,6 +1,7 @@
 import React, { SyntheticEvent } from 'react'
 import { Item, Button, Label, Segment } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
+import { observer } from "mobx-react-lite";
 
 interface IProps {
     //in the props, we will be recieving an array called fishCaught of type IFish
@@ -52,4 +53,4 @@ const FishCaughtList: React.FC<IProps> = ({ fishCaught, selectFish, deleteFish, 
 }
 
 
-export default FishCaughtList;
+export default observer(FishCaughtList);

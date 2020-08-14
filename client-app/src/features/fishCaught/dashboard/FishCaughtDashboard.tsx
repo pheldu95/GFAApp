@@ -4,6 +4,7 @@ import { IFish } from '../../../app/models/fish';
 import FishCaughtList from './FishCaughtList';
 import FishDetails from '../details/FishDetails';
 import FishForm from '../form/FishForm';
+import { observer } from "mobx-react-lite";
 
 interface IProps {
     //in the props, we will be recieving an array called fishCaught of type IFish
@@ -77,4 +78,4 @@ const FishCaughtDashboard: React.FC<IProps> = ({
   );
 };
 
-export default FishCaughtDashboard;
+export default observer(FishCaughtDashboard);

@@ -7,7 +7,7 @@ import './styles.css'
 import agent from '../api/agent';
 import { LoadingComponent } from './LoadingComponent';
 import FishStore from '../stores/fishStore';
-
+import {observer} from 'mobx-react-lite';
 
 const App = () => {
   //make the FishStore from mobx available to this component
@@ -78,27 +78,13 @@ const App = () => {
   }
   //in functional component, use useEffect instead of componentDidMount
   useEffect(() => {
-    //import our agent.ts file so we can use all our axios requests we made in the FishCaught object
-    agent.FishCaught.list()
-    .then((response) => {
-      //create an array that we can add our fish once their dates are reformatted
-      let fishCaught: IFish[] = [];
-      //loop through and reformat date
-      //then add the fish to the fishCaught array
-      response.forEach(fish => {
-        fish.caughtDate = fish.caughtDate.split('.')[0];
-        fishCaught.push(fish);
-      })
-      //setFishCaught to our new fishCaught array with the reformatted dates
-      //used instead of this.setState
-      setFishCaught(fishCaught);
-    }).then(() => setLoading(false));
-
-    //we add an empty array at the end. this makes the useEffect only run ones
-  }, [])
+    //use our fishStore to get fish
+    fishStore.loadFishCaught();
+    //we add an array at the end. this makes the useEffect only run ones
+  }, [fishStore])
 
   //if the page is loading, then return this component instead of the return below
-  if (loading) return <LoadingComponent content='Loading fish feed...' />
+  if (fishStore.loadingInitial) return <LoadingComponent content='Loading fish feed...' />
 
 
   // componentDidMount = () =>{
@@ -116,7 +102,7 @@ const App = () => {
       <NavBar openCreateForm={handleOpenCreateForm} />
       <Container style={{ marginTop: "7em" }}>
         <FishCaughtDashboard
-          fishCaught={fishCaught}
+          fishCaught={fishStore.fishCaught}
           selectFish={handleSelectFish}
           selectedFish={selectedFish}
           editMode={editMode}
@@ -134,4 +120,4 @@ const App = () => {
 }
 
 
-export default App;
+export default observer(App);
