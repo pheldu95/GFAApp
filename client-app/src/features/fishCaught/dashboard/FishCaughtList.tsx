@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { SyntheticEvent } from 'react'
 import { Item, Button, Label, Segment } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 
@@ -7,9 +7,11 @@ interface IProps {
     //from App.tsx
     fishCaught: IFish[]
     selectFish: (id: string) => void;
-    deleteFish: (id: string) => void;
+    deleteFish: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+    submitting: boolean;
+    target: string;
 }
-const FishCaughtList: React.FC<IProps> = ({ fishCaught, selectFish, deleteFish }) => {
+const FishCaughtList: React.FC<IProps> = ({ fishCaught, selectFish, deleteFish, submitting, target }) => {
     return (
       <Segment clearing>
         <Item.Group divided>
@@ -28,8 +30,13 @@ const FishCaughtList: React.FC<IProps> = ({ fishCaught, selectFish, deleteFish }
                     content="View"
                     color="blue"
                   />
+                  {/* loading flag only activates when the target matches the id of this button
+                  and submitting is true. that way, clicking the button doesnt trigger every other buttons loading flag,
+                  only it's own */}
                   <Button
-                    onClick={() => deleteFish(fish.id)}
+                    name={fish.id}
+                    loading={target === fish.id && submitting}
+                    onClick={(e) => deleteFish(e, fish.id)}
                     floated="right"
                     content="Delete"
                     color="red"

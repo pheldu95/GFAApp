@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { IFish } from '../../../app/models/fish';
 import FishCaughtList from './FishCaughtList';
@@ -18,7 +18,9 @@ interface IProps {
     setSelectedFish: (fish: IFish | null) => void;
     createFish: (fish: IFish) => void;
     editFish: (fish: IFish) => void;
-    deleteFish: (id: string) => void;
+    deleteFish: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+    submitting: boolean;
+    target: string;
 
 }
 
@@ -36,6 +38,8 @@ const FishCaughtDashboard: React.FC<IProps> = ({
   createFish,
   editFish,
   deleteFish,
+  submitting,
+  target
 }) => {
   return (
     <Grid>
@@ -44,6 +48,8 @@ const FishCaughtDashboard: React.FC<IProps> = ({
             fishCaught={fishCaught} 
             selectFish={selectFish} 
             deleteFish={deleteFish}
+            submitting={submitting}
+            target={target}
         />
       </Grid.Column>
       <Grid.Column width={6}>
@@ -63,6 +69,7 @@ const FishCaughtDashboard: React.FC<IProps> = ({
             setEditMode={setEditMode}
             createFish={createFish}
             editFish={editFish}
+            submitting={submitting}
           />
         )}
       </Grid.Column>

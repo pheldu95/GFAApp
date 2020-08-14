@@ -1,10 +1,11 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, SyntheticEvent } from 'react';
 import {Container} from 'semantic-ui-react';
 import { IFish } from '../models/fish';
 import { NavBar } from '../../features/nav/NavBar';
 import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtDashboard';
 import './styles.css'
 import agent from '../api/agent';
+import { LoadingComponent } from './LoadingComponent';
 
 
 const App = () => {
@@ -14,6 +15,13 @@ const App = () => {
   //that we, if no fish is selected, selectedFish will just be null
   const [selectedFish, setSelectedFish] = useState<IFish | null>(null);
   const [editMode, setEditMode] = useState(false);
+  //will toggle this state between whether the page is loading or not
+  const [loading, setLoading] = useState(true);
+  //we will toggle this state between whether we are submitting some change to the API or not
+  //if submitting is true, then our buttons will have a loading icon
+  //we pass submitting down to our dashboard, and then our list and form. as props
+  const [submitting, setSubmitting] = useState(false);
+  const[target, setTarget] = useState('');
 
   const handleSelectFish = (id: string) =>{
     //filter out every fish that doesnt have the id getting passed into this function
@@ -28,6 +36,8 @@ const App = () => {
   }
 
   const handleCreateFish = (fish: IFish) => {
+    //set it to true, so we can show the loading icon
+    setSubmitting(true);
     //use agent.ts to add our fish
     agent.FishCaught.create(fish).then(() => {
       //add the new fish once we have received acknowledgement that the fish has been sent to the server and db
@@ -36,24 +46,30 @@ const App = () => {
       setSelectedFish(fish);
       //switch off edit mode so the details view is the only thing shown
       setEditMode(false);
-    })
+      //then set the submitting toggle back to false, so loading icon disappears
+    }).then(() => setSubmitting(false));
   }
 
   const handleEditFish = (fish: IFish) => {
+    setSubmitting(true);
     agent.FishCaught.update(fish).then(() => {
       //filter out the fish that we have edited, then add the updated version
       setFishCaught([...fishCaught.filter(f => f.id !== fish.id), fish]);
       setSelectedFish(fish);
       setEditMode(false);
-    })
+    }).then(() => setSubmitting(false));
     
   }
 
-  const handleDeleteFish = (id: string) => {
+  //we will receive the event that has the unique name of the button pressed
+  //that way we can toggle the loading icon just for that button
+  const handleDeleteFish = (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+    setSubmitting(true);
+    setTarget(event.currentTarget.name);
     agent.FishCaught.delete(id).then(()=>{
       //filter out the fish we are deleting
       setFishCaught([...fishCaught.filter(f => f.id !== id)]);
-    })
+    }).then(() => setSubmitting(false));
     
   }
   //in functional component, use useEffect instead of componentDidMount
@@ -72,9 +88,14 @@ const App = () => {
       //setFishCaught to our new fishCaught array with the reformatted dates
       //used instead of this.setState
       setFishCaught(fishCaught);
-    });
+    }).then(() => setLoading(false));
+
     //we add an empty array at the end. this makes the useEffect only run ones
   }, [])
+
+  //if the page is loading, then return this component instead of the return below
+  if (loading) return <LoadingComponent content='Loading fish feed...' />
+
 
   // componentDidMount = () =>{
   //   //<IFish[]> tells axios that we are returning an array as the response. of type IFish
@@ -100,6 +121,8 @@ const App = () => {
           createFish={handleCreateFish}
           editFish={handleEditFish}
           deleteFish={handleDeleteFish}
+          submitting={submitting}
+          target={target}
         />
       </Container>
     </Fragment>
