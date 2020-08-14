@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, SyntheticEvent } from 'react';
+import React, { useState, useEffect, Fragment, SyntheticEvent, useContext } from 'react';
 import {Container} from 'semantic-ui-react';
 import { IFish } from '../models/fish';
 import { NavBar } from '../../features/nav/NavBar';
@@ -6,9 +6,13 @@ import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtD
 import './styles.css'
 import agent from '../api/agent';
 import { LoadingComponent } from './LoadingComponent';
+import FishStore from '../stores/fishStore';
 
 
 const App = () => {
+  //make the FishStore from mobx available to this component
+  const fishStore = useContext(FishStore);
+
   //our useState is using  <IFish[]>, the IFish interface
   const [fishCaught, setFishCaught] = useState<IFish[]>([]);
   //our selected fish can be a type of IFish, or it can be null.
