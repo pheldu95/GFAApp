@@ -1,22 +1,21 @@
-import React, { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, useContext } from 'react'
 import { Item, Button, Label, Segment } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { observer } from "mobx-react-lite";
+import FishStore from "../../../app/stores/fishStore";
 
 interface IProps {
-    //in the props, we will be recieving an array called fishCaught of type IFish
-    //from App.tsx
-    fishCaught: IFish[]
-    selectFish: (id: string) => void;
     deleteFish: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
     submitting: boolean;
     target: string;
 }
-const FishCaughtList: React.FC<IProps> = ({ fishCaught, selectFish, deleteFish, submitting, target }) => {
+const FishCaughtList: React.FC<IProps> = ({ deleteFish, submitting, target }) => {
+    const fishStore = useContext(FishStore);
+    const { fishCaughtByDate, selectFish} = fishStore;
     return (
       <Segment clearing>
         <Item.Group divided>
-          {fishCaught.map((fish) => (
+          {fishCaughtByDate.map((fish) => (
             <Item key={fish.id}>
               <Item.Content>
                 <Item.Header as="a">

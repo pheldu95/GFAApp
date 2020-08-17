@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment, SyntheticEvent, useContext } from 'react';
 import {Container} from 'semantic-ui-react';
 import { IFish } from '../models/fish';
-import { NavBar } from '../../features/nav/NavBar';
+import NavBar from '../../features/nav/NavBar';
 import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtDashboard';
 import './styles.css'
 import agent from '../api/agent';
@@ -27,32 +27,14 @@ const App = () => {
   const [submitting, setSubmitting] = useState(false);
   const[target, setTarget] = useState('');
 
-  const handleSelectFish = (id: string) =>{
-    //filter out every fish that doesnt have the id getting passed into this function
-    //then set the remaining fish as our selectedFish
-    setSelectedFish(fishCaught.filter(f => f.id === id)[0])
-    setEditMode(false);
-  }
+  // const handleSelectFish = (id: string) =>{
+  //   //filter out every fish that doesnt have the id getting passed into this function
+  //   //then set the remaining fish as our selectedFish
+  //   setSelectedFish(fishCaught.filter(f => f.id === id)[0])
+  //   setEditMode(false);
+  // }
 
-  const handleOpenCreateForm = () =>{
-    setSelectedFish(null);
-    setEditMode(true);
-  }
-
-  const handleCreateFish = (fish: IFish) => {
-    //set it to true, so we can show the loading icon
-    setSubmitting(true);
-    //use agent.ts to add our fish
-    agent.FishCaught.create(fish).then(() => {
-      //add the new fish once we have received acknowledgement that the fish has been sent to the server and db
-      setFishCaught([...fishCaught, fish]);
-      //set the new fish as the selected fish for the details view
-      setSelectedFish(fish);
-      //switch off edit mode so the details view is the only thing shown
-      setEditMode(false);
-      //then set the submitting toggle back to false, so loading icon disappears
-    }).then(() => setSubmitting(false));
-  }
+  
 
   const handleEditFish = (fish: IFish) => {
     setSubmitting(true);
@@ -99,16 +81,12 @@ const App = () => {
   // }
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm} />
+      <NavBar/>
       <Container style={{ marginTop: "7em" }}>
         <FishCaughtDashboard
           fishCaught={fishStore.fishCaught}
-          selectFish={handleSelectFish}
-          selectedFish={selectedFish}
-          editMode={editMode}
           setEditMode={setEditMode}
           setSelectedFish={setSelectedFish}
-          createFish={handleCreateFish}
           editFish={handleEditFish}
           deleteFish={handleDeleteFish}
           submitting={submitting}

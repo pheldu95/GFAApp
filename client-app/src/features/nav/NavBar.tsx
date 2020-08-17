@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Menu, Container, Button } from 'semantic-ui-react'
+import FishStore from '../../app/stores/fishStore';
+import { observer } from 'mobx-react-lite';
 
-interface IProps{
-    //will be receiving a function that takes no parameters and returns void, called openCreateForm
-    openCreateForm: () => void;
-}
 
-export const NavBar: React.FC<IProps> = ({openCreateForm}) => {
+
+
+const NavBar: React.FC = () => {
+    const fishStore = useContext(FishStore);
     return (
         <Menu fixed='top' inverted style={{backgroundColor: '#228b22'}}>
             <Container>
@@ -18,9 +19,11 @@ export const NavBar: React.FC<IProps> = ({openCreateForm}) => {
                     name='Fish Feed'
                 />
                 <Menu.Item>
-                    <Button onClick={openCreateForm} positive content='Add Catch'/>
+                    <Button onClick={fishStore.openCreateForm} positive content='Add Catch'/>
                 </Menu.Item>
             </Container>
         </Menu>
     )
 }
+
+export default observer(NavBar)

@@ -1,23 +1,18 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useContext } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { IFish } from '../../../app/models/fish';
 import FishCaughtList from './FishCaughtList';
 import FishDetails from '../details/FishDetails';
 import FishForm from '../form/FishForm';
 import { observer } from "mobx-react-lite";
+import FishStore from '../../../app/stores/fishStore';
 
 interface IProps {
     //in the props, we will be recieving an array called fishCaught of type IFish
     //from App.tsx
     fishCaught: IFish[]
-    //will also be receiving a function that takes an id as a perameter and returns void
-    selectFish: (id: string) => void;
-    //either will be a fish or will be null. if it is null, we won't display it
-    selectedFish: IFish | null;
-    editMode: boolean;
     setEditMode: (editMode: boolean) => void;
     setSelectedFish: (fish: IFish | null) => void;
-    createFish: (fish: IFish) => void;
     editFish: (fish: IFish) => void;
     deleteFish: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
     submitting: boolean;
@@ -31,23 +26,20 @@ interface IProps {
 //just pass {fishCaught} into the function instead of props
 const FishCaughtDashboard: React.FC<IProps> = ({
   fishCaught,
-  selectFish,
-  selectedFish,
-  editMode,
   setEditMode,
   setSelectedFish,
-  createFish,
   editFish,
   deleteFish,
   submitting,
   target
 }) => {
+  const fishStore = useContext(FishStore);
+  //destructure what we need from the fishStore
+  const {editMode, selectedFish} = fishStore
   return (
     <Grid>
       <Grid.Column width={10}>
         <FishCaughtList 
-            fishCaught={fishCaught} 
-            selectFish={selectFish} 
             deleteFish={deleteFish}
             submitting={submitting}
             target={target}
@@ -56,7 +48,6 @@ const FishCaughtDashboard: React.FC<IProps> = ({
       <Grid.Column width={6}>
         {selectedFish && !editMode && (
           <FishDetails
-            fish={selectedFish}
             setSelectedFish={setSelectedFish}
             setEditMode={setEditMode}
           />
@@ -68,7 +59,6 @@ const FishCaughtDashboard: React.FC<IProps> = ({
             key={(selectedFish && selectedFish.id) || 0}
             fish={selectedFish!}
             setEditMode={setEditMode}
-            createFish={createFish}
             editFish={editFish}
             submitting={submitting}
           />

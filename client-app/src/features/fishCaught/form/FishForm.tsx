@@ -1,16 +1,18 @@
-import React, {useState, FormEvent} from 'react'
+import React, {useState, FormEvent, useContext } from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
+import FishStore from '../../../app/stores/fishStore';
 
 interface IProps{
     setEditMode: (editMode: boolean) => void;
     fish: IFish;
-    createFish: (fish: IFish) => void;
     editFish: (fish: IFish) => void;
     submitting: boolean;
 }
-const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, createFish, editFish, submitting }) => {
+const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, editFish, submitting }) => {
+    const fishStore = useContext(FishStore);
+    const {createFish} =fishStore
     //return the fish if there is one to populate the form with
     //if we are creating a new caughtFish, we don't need to populate the form
     //so we just return all the fields but have them be empty
