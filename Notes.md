@@ -41,3 +41,35 @@ let newFish = {
                 ...fish,
                 id: uuid();
             }
+
+MobX
+---------
+npm install mobx mobx-react-lite
+add this to "compilerOptions" in tsconfig.json:
+    "experimentalDecorators": true
+
+it's a store like redux, except you can mutate state directly
+in redux you can't do that.
+can make react components observers. so when an observable changes, the react component will rerender
+computed values: values derived from the existing state
+    @computed get fullName(){
+        return firstName + lastName
+    }
+reactions track observables
+    -can do something based on if an observalbe changes 
+
+Must make component an observer to be able to use observables
+like this:
+export default observer(App);
+
+MobX Strict Mode
+----------------
+we tell mobx to run in strict mode
+why?
+use enforce actions
+makes it so observables can't be changed outside of an @action
+must refactor our code so it's wrapped inside an action
+so if we are using an async, everything that modifies the state after the await must be put in a:
+runInAction(() => {
+
+})

@@ -3,16 +3,14 @@ import { Segment, Form, Button } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
 import FishStore from '../../../app/stores/fishStore';
+import { observer } from 'mobx-react-lite';
 
 interface IProps{
-    setEditMode: (editMode: boolean) => void;
     fish: IFish;
-    editFish: (fish: IFish) => void;
-    submitting: boolean;
 }
-const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, editFish, submitting }) => {
+const FishForm: React.FC<IProps> = ({ fish: initialFormState }) => {
     const fishStore = useContext(FishStore);
-    const {createFish} =fishStore
+    const { createFish, editFish, submitting, cancelFormOpen } =fishStore
     //return the fish if there is one to populate the form with
     //if we are creating a new caughtFish, we don't need to populate the form
     //so we just return all the fields but have them be empty
@@ -112,10 +110,10 @@ const FishForm: React.FC<IProps> = ({ setEditMode, fish: initialFormState, editF
                 <Form.Input onChange={handleInputChange} name='caughtDate' type='datetime-local' placeholder='Date' value={fish.caughtDate}/>
                 {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
                 <Button loading={submitting} floated='right' positive type='submit' content='Submit'/>
-                <Button onClick={() => setEditMode(false)} floated='right' type='button' content='Cancel'/>
+                <Button onClick={cancelFormOpen} floated='right' type='button' content='Cancel'/>
             </Form>
         </Segment>
     )
 }
 
-export default FishForm;
+export default observer(FishForm);

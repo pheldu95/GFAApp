@@ -1,17 +1,11 @@
-import React, { SyntheticEvent, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Item, Button, Label, Segment } from 'semantic-ui-react'
-import { IFish } from '../../../app/models/fish';
 import { observer } from "mobx-react-lite";
 import FishStore from "../../../app/stores/fishStore";
 
-interface IProps {
-    deleteFish: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-    submitting: boolean;
-    target: string;
-}
-const FishCaughtList: React.FC<IProps> = ({ deleteFish, submitting, target }) => {
+const FishCaughtList: React.FC = () => {
     const fishStore = useContext(FishStore);
-    const { fishCaughtByDate, selectFish} = fishStore;
+    const { fishCaughtByDate, selectFish, deleteFish, submitting, target} = fishStore;
     return (
       <Segment clearing>
         <Item.Group divided>
@@ -36,7 +30,7 @@ const FishCaughtList: React.FC<IProps> = ({ deleteFish, submitting, target }) =>
                   <Button
                     name={fish.id}
                     loading={target === fish.id && submitting}
-                    onClick={(e) => deleteFish(e, fish.id)}
+                    onClick={(e) => deleteFish(fish.id, e)}
                     floated="right"
                     content="Delete"
                     color="red"
