@@ -9,12 +9,12 @@ class FishStore{
     //will store our fish in an observable map. this way it will also update when we delete a fish
     @observable fishRegistry = new Map();
     @observable fishCaught: IFish[] = [];
-    //selectedFish can be IFish or undefined
-    @observable selectedFish: IFish | undefined;
+    //fish can be IFish or undefined
+    @observable fish: IFish | undefined;
     //observable for the loading indicator
     @observable loadingInitial = false;
     @observable editMode = false;
-    @observable submitting = true;
+    @observable submitting = false;
     //taget button for our loading indicator
     @observable target = '';
 
@@ -54,6 +54,34 @@ class FishStore{
         }
     }
 
+    //method for when the user clicks on view button, or refreshes the details page, or navigates directly to the page
+    @action loadFish = async (id: string) => {
+        let fish = this.getFish(id);
+        //if there is a fish in the registry, then that becomes the selected fish
+        if(fish){
+            this.fish = fish;
+        //if there isn't a fish in the registry, then we have to go get it
+        }else{
+            this.loadingInitial = true;
+            try {
+                fish = await agent.FishCaught.details(id);
+                runInAction('getting individual fish', () => {
+                    this.fish = fish;
+                    this.loadingInitial = false;
+                })
+            } catch (error) {
+                runInAction('get fish error', () => {
+                    this.loadingInitial = false;
+                })
+                console.log(error);
+            }
+        }
+    }
+
+    getFish = (id: string) => {
+        return this.fishRegistry.get(id);
+    }
+
     @action createFish = async (fish: IFish) => {
         this.submitting = true;
         try {
@@ -78,7 +106,7 @@ class FishStore{
             await agent.FishCaught.update(fish);
             runInAction('editing fish', () => {
                 this.fishRegistry.set(fish.id, fish);
-                this.selectedFish = fish;
+                this.fish = fish;
                 this.editMode = false;
                 this.submitting = false;
             })
@@ -118,17 +146,17 @@ class FishStore{
 
     @action openCreateForm = () => {
         this.editMode = true;
-        this.selectedFish = undefined;
+        this.fish = undefined;
     }
 
     @action openEditForm = (id: string) =>{
-        this.selectedFish = this.fishRegistry.get(id);
+        this.fish = this.fishRegistry.get(id);
         this.editMode = true;
     }
 
     //a method for the cancel button. so we can cancel the fish select
     @action cancelSelectedFish = () => {
-        this.selectedFish = undefined;
+        this.fish = undefined;
     }
 
     //method for the cancel button on the form. will cancel the create fish or edit fish
@@ -139,7 +167,7 @@ class FishStore{
 
     @action selectFish = (id: string) =>{
         //use the key to get the fish. in the fishRegistry, the keys are all ids
-        this.selectedFish = this.fishRegistry.get(id);
+        this.fish = this.fishRegistry.get(id);
         this.editMode = false;
     }
 }

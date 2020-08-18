@@ -1,12 +1,29 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Card, Button } from 'semantic-ui-react'
 import FishStore from "../../../app/stores/fishStore";
 import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from 'react-router-dom';
+import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 
-const FishCaughtDetails: React.FC = () => {
+//make an interface with type that we can pass to our <RouteComponentProps>
+//if we don't do this, match.params will not know what id is. which is what we are passing in the url
+interface DetailParams{
+    id: string
+}
+//use React.FC<RouteComponentProps> so that we get access to the match object that will have our fish id in it
+const FishCaughtDetails: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
     const fishStore = useContext(FishStore);
     //destructure and rename selectedFish to fish
-    const {selectedFish: fish, openEditForm, cancelSelectedFish} = fishStore
+    const { fish, openEditForm, cancelSelectedFish, loadFish, loadingInitial } = fishStore
+    
+    //use useEffect to load our Fish on page load
+    useEffect(() => {
+        loadFish(match.params.id)
+    }, [loadFish])
+
+    //if loadingInitial is true, or the fish is undefined, we will show the loading screen
+    if(loadingInitial || !fish) return <LoadingComponent content='Loading fish...'/>
+    
     return (
         <Card fluid>
             <Card.Content>

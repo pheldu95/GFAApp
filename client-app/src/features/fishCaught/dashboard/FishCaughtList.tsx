@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Item, Button, Label, Segment } from 'semantic-ui-react'
 import { observer } from "mobx-react-lite";
 import FishStore from "../../../app/stores/fishStore";
+import { Link } from 'react-router-dom';
 
 const FishCaughtList: React.FC = () => {
     const fishStore = useContext(FishStore);
@@ -19,7 +20,8 @@ const FishCaughtList: React.FC = () => {
                 <Item.Description>Length: {fish.length}</Item.Description>
                 <Item.Extra>
                   <Button
-                    onClick={() => selectFish(fish.id)}
+                    as={Link}
+                    to={`/fishCaught/${fish.id}`}
                     floated="right"
                     content="View"
                     color="blue"

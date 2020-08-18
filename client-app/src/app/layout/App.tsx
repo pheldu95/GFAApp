@@ -6,6 +6,10 @@ import './styles.css'
 import { LoadingComponent } from './LoadingComponent';
 import FishStore from '../stores/fishStore';
 import {observer} from 'mobx-react-lite';
+import { Route } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
+import FishForm from '../../features/fishCaught/form/FishForm';
+import FishDetails from '../../features/fishCaught/details/FishDetails';
 
 const App = () => {
   //make the FishStore from mobx available to this component
@@ -25,9 +29,12 @@ const App = () => {
 
   return (
     <Fragment>
-      <NavBar/>
+      <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <FishCaughtDashboard/>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/fishCaught" component={FishCaughtDashboard} />
+        <Route path="/fishCaught/:id" component={FishDetails} />
+        <Route path="/createFish" component={FishForm} />
       </Container>
     </Fragment>
   );
