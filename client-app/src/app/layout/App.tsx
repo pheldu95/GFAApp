@@ -6,12 +6,13 @@ import './styles.css'
 import { LoadingComponent } from './LoadingComponent';
 import FishStore from '../stores/fishStore';
 import {observer} from 'mobx-react-lite';
-import { Route } from 'react-router-dom';
+import { Route, withRouter, RouteComponentProps } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import FishForm from '../../features/fishCaught/form/FishForm';
 import FishDetails from '../../features/fishCaught/details/FishDetails';
 
-const App = () => {
+//bringing in location as a prop so we can use it as a key on our FishForm route
+const App: React.FC<RouteComponentProps> = ({location}) => {
   //make the FishStore from mobx available to this component
   const fishStore = useContext(FishStore);
 
@@ -34,11 +35,14 @@ const App = () => {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/fishCaught" component={FishCaughtDashboard} />
         <Route path="/fishCaught/:id" component={FishDetails} />
-        <Route path="/createFish" component={FishForm} />
+        {/* can pass an array of routes into the same component
+        to load the same component for different routes. like create and edit(manage) */}
+        {/* whenever the location key changes, the FishForm reinitializes */}
+        <Route key={location.key} path={['/createFish', '/manage/:id']} component={FishForm} />
       </Container>
     </Fragment>
   );
 }
 
 
-export default observer(App);
+export default withRouter(observer(App));

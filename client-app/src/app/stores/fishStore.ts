@@ -9,8 +9,8 @@ class FishStore{
     //will store our fish in an observable map. this way it will also update when we delete a fish
     @observable fishRegistry = new Map();
     @observable fishCaught: IFish[] = [];
-    //fish can be IFish or undefined
-    @observable fish: IFish | undefined;
+    //fish can be IFish or null
+    @observable fish: IFish | null = null;
     //observable for the loading indicator
     @observable loadingInitial = false;
     @observable editMode = false;
@@ -76,6 +76,11 @@ class FishStore{
                 console.log(error);
             }
         }
+    }
+
+    //make fish null when we press create fish button so the form is empty 
+    @action clearFish(){
+        this.fish = null;
     }
 
     getFish = (id: string) => {
@@ -146,7 +151,7 @@ class FishStore{
 
     @action openCreateForm = () => {
         this.editMode = true;
-        this.fish = undefined;
+        this.fish = null;
     }
 
     @action openEditForm = (id: string) =>{
@@ -156,7 +161,7 @@ class FishStore{
 
     //a method for the cancel button. so we can cancel the fish select
     @action cancelSelectedFish = () => {
-        this.fish = undefined;
+        this.fish = null;
     }
 
     //method for the cancel button on the form. will cancel the create fish or edit fish

@@ -1,49 +1,63 @@
-import React, {useState, FormEvent, useContext } from 'react'
+import React, {useState, FormEvent, useContext, useEffect } from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
 import FishStore from '../../../app/stores/fishStore';
 import { observer } from 'mobx-react-lite';
+import { RouteComponentProps } from 'react-router-dom';
 
-interface IProps{
-    fish: IFish;
+//tell the component that there witll be an id. in match.params.id
+interface DetailParams{
+    id: string;
 }
-const FishForm: React.FC<IProps> = ({ fish: initialFormState }) => {
-    const fishStore = useContext(FishStore);
-    const { createFish, editFish, submitting, cancelFormOpen } =fishStore
-    //return the fish if there is one to populate the form with
-    //if we are creating a new caughtFish, we don't need to populate the form
-    //so we just return all the fields but have them be empty
-    const intializeForm = () =>{
-        if(initialFormState){
-            return initialFormState
-        } else{
-            return{
-                id: '',
-                fisherId: 0,
-                guideId: 0,
-                organizationId: 0,
-                fishTypeId: 0,
-                length: 0,
-                weight: 0,
-                exceptionalCatch: false,
-                unusualCatch: false,
-                latitude: 0,
-                longitude: 0,
-                skyTypeId: 0,
-                windTypeId: 0,
-                waterTypeId: 0,
-                moonPhase: '',
-                moonIlluminationPercent: 0,
-                airTemperature: 0,
-                waterTemperature: 0,
-                caughtDate: '',
-                lastModifiedDate: '2020-08-14T17:33'
-            }
-        }
-    };
 
-    const[fish, setFish] = useState<IFish>(intializeForm);
+const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
+    const fishStore = useContext(FishStore);
+    const { createFish, editFish, submitting, cancelFormOpen, fish: initialFormState, loadFish, clearFish } =fishStore
+   
+    const [fish, setFish] = useState<IFish>({
+        //this is the initial state
+        id: '',
+        fisherId: 0,
+        guideId: 0,
+        organizationId: 0,
+        fishTypeId: 0,
+        length: 0,
+        weight: 0,
+        exceptionalCatch: false,
+        unusualCatch: false,
+        latitude: 0,
+        longitude: 0,
+        skyTypeId: 0,
+        windTypeId: 0,
+        waterTypeId: 0,
+        moonPhase: '',
+        moonIlluminationPercent: 0,
+        airTemperature: 0,
+        waterTemperature: 0,
+        caughtDate: '',
+        lastModifiedDate: '2020-08-14T17:33'
+    });
+
+    //load the fish specified in the url on page load
+    //we can use .then() because the loadFish method from fishStore is async
+    useEffect(() => {
+        if (match.params.id && fish.id.length === 0){
+            loadFish(match.params.id).then(
+                //the && is used to say that we will only setFish if the initialFormState exists
+                //if it's undefined, then it won't setFish
+                () => initialFormState && setFish(initialFormState))
+        }
+        //the commented out code isn't working. not sure why
+        //but app seems to work without it
+        //return a function that will handle clean up
+        //it will clear our fish from the fishStore
+        // return() => {
+        //     clearFish();
+        // }
+        //add the things we are using to the dependencies
+    }, [loadFish, clearFish, match.params.id, initialFormState, fish.id.length])
+
 
     const handleSubmit = () =>{
         //if the id length is zero, that means it doesnt have an id, and is a new activity
