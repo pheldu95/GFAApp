@@ -26,20 +26,27 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   }, [fishStore])
 
   //if the page is loading, then return this component instead of the return below
-  if (fishStore.loadingInitial) return <LoadingComponent content='Loading fish feed...' />
+  if (fishStore.loadingInitial) return <LoadingComponent content='Loading...' />
 
   return (
     <Fragment>
-      <NavBar />
-      <Container style={{ marginTop: "7em" }}>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/fishCaught" component={FishCaughtDashboard} />
-        <Route path="/fishCaught/:id" component={FishDetails} />
-        {/* can pass an array of routes into the same component
-        to load the same component for different routes. like create and edit(manage) */}
-        {/* whenever the location key changes, the FishForm reinitializes */}
-        <Route key={location.key} path={['/createFish', '/manage/:id']} component={FishForm} />
-      </Container>
+      <Route exact path="/" component={HomePage} />
+      {/* when the route has a / and anything else after it, it will hit the Route below
+      that's what the /(.+) means */}
+      {/* Now, our home page will not have the nav bar, only components with the below path will */}
+      <Route path={'/(.+)'} render={() => (
+          <Fragment>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+              <Route exact path="/fishCaught" component={FishCaughtDashboard} />
+              <Route path="/fishCaught/:id" component={FishDetails} />
+              {/* can pass an array of routes into the same component
+              to load the same component for different routes. like create and edit(manage) */}
+              {/* whenever the location key changes, the FishForm reinitializes */}
+              <Route key={location.key} path={['/createFish', '/manage/:id']} component={FishForm} />
+            </Container>
+          </Fragment>
+      )}/>
     </Fragment>
   );
 }

@@ -11,7 +11,7 @@ interface DetailParams{
     id: string;
 }
 
-const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
+const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}) => {
     const fishStore = useContext(FishStore);
     const { createFish, editFish, submitting, cancelFormOpen, fish: initialFormState, loadFish, clearFish } =fishStore
    
@@ -67,12 +67,13 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
                 ...fish,
                 id: uuid()
             }
-            
-            createFish(newFish);
+            //send the user to the details page for the new fish
+            createFish(newFish).then(() => history.push(`/fishCaught/${newFish.id}`));
         }else{
             //if the id length is greater than zero, that means we are editing. b/c already has an id
             //so we just pass the fish to editFish
-            editFish(fish)
+            //then we send the user to the details page for the edited fish
+            editFish(fish).then(() => history.push(`/fishCaught/${fish.id}`));
         }        
     }
 

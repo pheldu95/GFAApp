@@ -20,7 +20,7 @@ const FishCaughtDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, 
     //use useEffect to load our Fish on page load
     useEffect(() => {
         loadFish(match.params.id)
-    }, [loadFish])
+    }, [loadFish, match.params.id])
 
     //if loadingInitial is true, or the fish is undefined, we will show the loading screen
     if(loadingInitial || !fish) return <LoadingComponent content='Loading fish...'/>
