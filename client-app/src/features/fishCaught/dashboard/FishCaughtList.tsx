@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const FishCaughtList: React.FC = () => {
     const fishStore = useContext(FishStore);
-    const { fishCaughtByDate, selectFish, deleteFish, submitting, target} = fishStore;
+    const { fishCaughtByDate, deleteFish, submitting, target} = fishStore;
     return (
       <Segment clearing>
         <Item.Group divided>

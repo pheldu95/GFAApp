@@ -8,12 +8,10 @@ configure({enforceActions: 'always'});
 class FishStore{
     //will store our fish in an observable map. this way it will also update when we delete a fish
     @observable fishRegistry = new Map();
-    @observable fishCaught: IFish[] = [];
     //fish can be IFish or null
     @observable fish: IFish | null = null;
     //observable for the loading indicator
     @observable loadingInitial = false;
-    @observable editMode = false;
     @observable submitting = false;
     //taget button for our loading indicator
     @observable target = '';
@@ -93,7 +91,6 @@ class FishStore{
             await agent.FishCaught.create(fish);
             runInAction('creating activity', () => {
                 this.fishRegistry.set(fish.id, fish);
-                this.editMode = false;
                 this.submitting = false;
             })
            
@@ -112,7 +109,6 @@ class FishStore{
             runInAction('editing fish', () => {
                 this.fishRegistry.set(fish.id, fish);
                 this.fish = fish;
-                this.editMode = false;
                 this.submitting = false;
             })
         } catch (error) {
@@ -149,32 +145,7 @@ class FishStore{
         }
     }
 
-    @action openCreateForm = () => {
-        this.editMode = true;
-        this.fish = null;
-    }
-
-    @action openEditForm = (id: string) =>{
-        this.fish = this.fishRegistry.get(id);
-        this.editMode = true;
-    }
-
-    //a method for the cancel button. so we can cancel the fish select
-    @action cancelSelectedFish = () => {
-        this.fish = null;
-    }
-
-    //method for the cancel button on the form. will cancel the create fish or edit fish
-    //so we can close the form
-    @action cancelFormOpen = () =>{
-        this.editMode = false;
-    }
-
-    @action selectFish = (id: string) =>{
-        //use the key to get the fish. in the fishRegistry, the keys are all ids
-        this.fish = this.fishRegistry.get(id);
-        this.editMode = false;
-    }
+   
 }
 
 export default createContext(new FishStore())

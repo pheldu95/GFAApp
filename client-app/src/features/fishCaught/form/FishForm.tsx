@@ -13,7 +13,7 @@ interface DetailParams{
 
 const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}) => {
     const fishStore = useContext(FishStore);
-    const { createFish, editFish, submitting, cancelFormOpen, fish: initialFormState, loadFish, clearFish } =fishStore
+    const { createFish, editFish, submitting, fish: initialFormState, loadFish, clearFish } =fishStore
    
     const [fish, setFish] = useState<IFish>({
         //this is the initial state
@@ -125,7 +125,7 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
                 <Form.Input onChange={handleInputChange} name='caughtDate' type='datetime-local' placeholder='Date' value={fish.caughtDate}/>
                 {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
                 <Button loading={submitting} floated='right' positive type='submit' content='Submit'/>
-                <Button onClick={cancelFormOpen} floated='right' type='button' content='Cancel'/>
+                <Button onClick={() => history.push('/fishCaught')} floated='right' type='button' content='Cancel'/>
             </Form>
         </Segment>
     )

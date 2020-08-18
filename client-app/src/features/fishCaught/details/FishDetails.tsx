@@ -15,7 +15,7 @@ interface DetailParams{
 const FishCaughtDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
     const fishStore = useContext(FishStore);
     //destructure and rename selectedFish to fish
-    const { fish, openEditForm, cancelSelectedFish, loadFish, loadingInitial } = fishStore
+    const { fish, loadFish, loadingInitial } = fishStore
     
     //use useEffect to load our Fish on page load
     useEffect(() => {

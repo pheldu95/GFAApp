@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Menu, Container, Button } from 'semantic-ui-react'
-import FishStore from '../../app/stores/fishStore';
 import { observer } from 'mobx-react-lite';
 import { NavLink } from 'react-router-dom';
 
@@ -8,7 +7,6 @@ import { NavLink } from 'react-router-dom';
 
 
 const NavBar: React.FC = () => {
-    const fishStore = useContext(FishStore);
     return (
         <Menu fixed='top' inverted style={{backgroundColor: '#228b22'}}>
             <Container>
