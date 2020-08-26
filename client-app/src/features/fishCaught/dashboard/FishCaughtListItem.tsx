@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Item, Button, Label } from 'semantic-ui-react'
+import { Item, Button, Segment, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import FishStore from "../../../app/stores/fishStore";
 import { IFish } from '../../../app/models/fish';
@@ -10,14 +10,31 @@ const FishCaughtListItem: React.FC<{fish: IFish}> = ({fish}) => {
     const { deleteFish, submitting, target } = fishStore;
 
     return (
-        <Item key={fish.id}>
-            <Item.Content>
-                <Item.Header as="a">
-                    Fish Species: {fish.fishTypeId}
-                </Item.Header>
-                <Item.Meta>Date: {fish.caughtDate}</Item.Meta>
-                <Item.Description>Length: {fish.length}</Item.Description>
-                <Item.Extra>
+        <Segment.Group>
+            <Segment>
+                <Item.Group>
+                    <Item key={fish.id}>
+                        <Item.Content>
+                            <Item.Header as="a">
+                                Fish Species: {fish.fishTypeId}
+                            </Item.Header>
+                            <Item.Description>Length: {fish.length}</Item.Description>
+
+                        </Item.Content>
+                    </Item>
+                </Item.Group>
+                
+            </Segment>
+            <Segment>
+                <Icon name='clock'/> {fish.caughtDate}
+                <Icon name='marker' /> {fish.latitude}, {fish.longitude}
+            </Segment>
+            <Segment secondary>
+                Maybe put fisherman's name?
+            </Segment>
+            <Segment clearing>
+                maybe something here
+                <span>
                     <Button
                         as={Link}
                         to={`/fishCaught/${fish.id}`}
@@ -25,13 +42,10 @@ const FishCaughtListItem: React.FC<{fish: IFish}> = ({fish}) => {
                         content="View"
                         color="blue"
                     />
-                    {/* loading flag only activates when the target matches the id of this button
-                    and submitting is true. that way, clicking the button doesnt trigger every other buttons loading flag,
-                    only it's own */}
-                    <Label basic content="Species" />
-                </Item.Extra>
-            </Item.Content>
-        </Item>
+                </span>
+            </Segment>
+        </Segment.Group>
+        
     )
 }
 

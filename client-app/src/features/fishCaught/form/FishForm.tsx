@@ -1,5 +1,5 @@
 import React, {useState, FormEvent, useContext, useEffect } from 'react'
-import { Segment, Form, Button } from 'semantic-ui-react'
+import { Segment, Form, Button, Grid } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
 import FishStore from '../../../app/stores/fishStore';
@@ -99,35 +99,40 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
         
     }
     return (
-        <Segment clearing>
-            <Form onSubmit={handleSubmit}>
-                <Form.Input onChange={handleInputChange} name='fisherId' type='number' placeholder='Fisher Id' value={fish.fisherId} />
-                <Form.Input onChange={handleInputChange} name='guideId' type='number'  placeholder='Guide Id' value={fish.guideId} />
-                <Form.Input onChange={handleInputChange} name='organizationId' type='number'  placeholder='Organization Id' value={fish.organizationId} />
-                <Form.Input onChange={handleInputChange} name='fishTypeId' type='number' placeholder='Fish Type' value={fish.fishTypeId}/>
-                {/* <Form.Field label='Fish Species' control='select'>
+        <Grid>
+            <Grid.Column widht={10}>
+                <Segment clearing>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Input onChange={handleInputChange} name='fisherId' type='number' placeholder='Fisher Id' value={fish.fisherId} />
+                        <Form.Input onChange={handleInputChange} name='guideId' type='number' placeholder='Guide Id' value={fish.guideId} />
+                        <Form.Input onChange={handleInputChange} name='organizationId' type='number' placeholder='Organization Id' value={fish.organizationId} />
+                        <Form.Input onChange={handleInputChange} name='fishTypeId' type='number' placeholder='Fish Type' value={fish.fishTypeId} />
+                        {/* <Form.Field label='Fish Species' control='select'>
                     <option value = {1}>Bass</option> 
                     <option value={2}>Lake Trout</option> 
                 </Form.Field> */}
-                <Form.Input onChange={handleInputChange} name='length' type='number'  placeholder='Length' value={fish.length}/>
-                <Form.Input onChange={handleInputChange} name='weight' type='number' placeholder='Weight' value={fish.weight}/>
-                <Form.Checkbox onChange={handleInputChange} label='Exceptional Catch?'/>
-                <Form.Checkbox onChange={handleInputChange} label='Unusual Catch?'/>
-                <Form.Input onChange={handleInputChange} name='latitude' type='number' placeholder='Latitude' value={fish.latitude} />
-                <Form.Input onChange={handleInputChange} name='longitude' type='number' placeholder='Longitude' value={fish.longitude} />
-                <Form.Input onChange={handleInputChange} name='skyTypeId' type='number' placeholder='Sky Type Id' value={fish.skyTypeId} />
-                <Form.Input onChange={handleInputChange} name='windTypeId' type='number' placeholder='windTypeId' value={fish.windTypeId} />
-                <Form.Input onChange={handleInputChange} name='waterTypeId' type='number' placeholder='waterTypeId' value={fish.waterTypeId} />
-                <Form.Input onChange={handleInputChange} name='moonPhase' placeholder='Moon Phase' value={fish.moonPhase} />
-                <Form.Input onChange={handleInputChange} name='moonIlluminationPercent' type='number' placeholder='moonIlluminationPercent' value={fish.moonIlluminationPercent} />
-                <Form.Input onChange={handleInputChange} name='airTemperature' type='number' placeholder='airTemperature' value={fish.airTemperature} />
-                <Form.Input onChange={handleInputChange} name='waterTemperature' type='number' placeholder='waterTemperature' value={fish.waterTemperature} />
-                <Form.Input onChange={handleInputChange} name='caughtDate' type='datetime-local' placeholder='Date' value={fish.caughtDate}/>
-                {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
-                <Button loading={submitting} floated='right' positive type='submit' content='Submit'/>
-                <Button onClick={() => history.push('/fishCaught')} floated='right' type='button' content='Cancel'/>
-            </Form>
-        </Segment>
+                        <Form.Input onChange={handleInputChange} name='length' type='number' placeholder='Length' value={fish.length} />
+                        <Form.Input onChange={handleInputChange} name='weight' type='number' placeholder='Weight' value={fish.weight} />
+                        <Form.Checkbox onChange={handleInputChange} label='Exceptional Catch?' />
+                        <Form.Checkbox onChange={handleInputChange} label='Unusual Catch?' />
+                        <Form.Input onChange={handleInputChange} name='latitude' type='number' placeholder='Latitude' value={fish.latitude} />
+                        <Form.Input onChange={handleInputChange} name='longitude' type='number' placeholder='Longitude' value={fish.longitude} />
+                        <Form.Input onChange={handleInputChange} name='skyTypeId' type='number' placeholder='Sky Type Id' value={fish.skyTypeId} />
+                        <Form.Input onChange={handleInputChange} name='windTypeId' type='number' placeholder='windTypeId' value={fish.windTypeId} />
+                        <Form.Input onChange={handleInputChange} name='waterTypeId' type='number' placeholder='waterTypeId' value={fish.waterTypeId} />
+                        <Form.Input onChange={handleInputChange} name='moonPhase' placeholder='Moon Phase' value={fish.moonPhase} />
+                        <Form.Input onChange={handleInputChange} name='moonIlluminationPercent' type='number' placeholder='moonIlluminationPercent' value={fish.moonIlluminationPercent} />
+                        <Form.Input onChange={handleInputChange} name='airTemperature' type='number' placeholder='airTemperature' value={fish.airTemperature} />
+                        <Form.Input onChange={handleInputChange} name='waterTemperature' type='number' placeholder='waterTemperature' value={fish.waterTemperature} />
+                        <Form.Input onChange={handleInputChange} name='caughtDate' type='datetime-local' placeholder='Date' value={fish.caughtDate} />
+                        {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
+                        <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
+                        <Button onClick={() => history.push('/fishCaught')} floated='right' type='button' content='Cancel' />
+                    </Form>
+                </Segment>
+            </Grid.Column>
+        </Grid>
+        
     )
 }
 

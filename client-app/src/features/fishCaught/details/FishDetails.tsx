@@ -1,9 +1,13 @@
 import React, { useContext, useEffect } from 'react'
-import { Card, Button } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import FishStore from "../../../app/stores/fishStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
+import FishDetailedHeader from './FishDetailedHeader';
+import FishDetailedInfo from './FishDetailedInfo';
+import FishDetailedChat from './FishDetailedChat';
+import FishDetailedSidebar from './FishDetailedSidebar';
 
 //make an interface with type that we can pass to our <RouteComponentProps>
 //if we don't do this, match.params will not know what id is. which is what we are passing in the url
@@ -26,22 +30,16 @@ const FishCaughtDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, 
     if(loadingInitial || !fish) return <LoadingComponent content='Loading fish...'/>
     
     return (
-        <Card fluid>
-            <Card.Content>
-            <Card.Header>{fish!.fishTypeId}</Card.Header>
-            <Card.Meta>
-                <span></span>
-            </Card.Meta>
-            <Card.Description>
-            </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-                <Button.Group widths={2}>
-                    <Button as={Link} to={`/manage/${fish.id}`} basic color='blue' content='Edit'/>
-                    <Button onClick={() => history.push('/fishCaught')} basic color='grey' content='Cancel'/>
-                </Button.Group>
-            </Card.Content>
-        </Card>
+        <Grid>
+            <Grid.Column width={10}>
+                <FishDetailedHeader fish={fish}/>
+                <FishDetailedInfo fish={fish}/>
+                <FishDetailedChat/>
+            </Grid.Column>
+            <Grid.Column width={6}>
+                <FishDetailedSidebar/>
+            </Grid.Column>
+        </Grid>
     )
 }
 
