@@ -21,7 +21,22 @@ class FishStore{
         //we have to turn our registry into an array using Array.from(this.fishRegistry.values())
         //once its an array, we can sort it by date
         //this will sort our fish by date caught in ascending date order
-        return Array.from(this.fishRegistry.values()).sort((a, b) => Date.parse(a.caughtDate) - Date.parse(b.caughtDate));
+        return this.groupFishCaughtByDate(Array.from(this.fishRegistry.values()))
+    }
+
+    groupFishCaughtByDate(fishCaught: IFish[]){
+        const sortedFishCaught = fishCaught.sort(
+            (a, b) => Date.parse(a.caughtDate) - Date.parse(b.caughtDate) 
+        )
+        //for each fish, it gives us a new array where the first item is the key and the second item is the fish
+        //reduce method will run another 'callback function' on each element in the array of arrays
+        return Object.entries(sortedFishCaught.reduce((fishCaught, fish)=>{
+            const date = fish.caughtDate.split('T')[0]; //split the date so we just have the date, not the time
+            //if the date is the same, then we use the spread operator to group the fish
+            fishCaught[date] = fishCaught[date] ? [...fishCaught[date], fish] : [fish];
+            return fishCaught;
+            //must type the object. the key will be a string, the value will be IFish array
+        }, {} as {[key: string]: IFish[]}));
     }
 
     //get our fish
@@ -42,7 +57,8 @@ class FishStore{
                     this.fishRegistry.set(fish.id, fish);
                 });
                 this.loadingInitial = false;
-            })
+            });
+            console.log(this.groupFishCaughtByDate(fishCaught));
             
         }catch( error){
             runInAction('load fish caught error', () =>{
