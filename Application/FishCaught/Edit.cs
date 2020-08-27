@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -31,6 +32,17 @@ namespace Application.FishCaught
             public int? WaterTemperature { get; set; }
             public DateTime? CaughtDate { get; set; }
             public DateTime? LastModifiedDate { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                //check to make sure FishTypeId is not empty
+                RuleFor(x => x.FishTypeId).NotEmpty();
+                RuleFor(x => x.FisherId).NotEmpty();
+                RuleFor(x => x.GuideId).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Command>

@@ -78,3 +78,10 @@ React Router DOM
 ----------------
 in client app, npm install react-router-dom
 npm install @types/react-router-dom
+
+
+Fluent Validation
+-----
+use nuget package manager to add FLuentValidation.ASP.Net Core 8.5.1 to Application project
+If you get an error, go up to root folder and dotnet restore and then dotnet build. in the console
+The FluentValidation class goes between the Command and the Handler.
