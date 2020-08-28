@@ -53,6 +53,7 @@ namespace API
         {
             if (env.IsDevelopment())
             {
+                //return developer exception page if we get an error
                 app.UseDeveloperExceptionPage();
             }
 
