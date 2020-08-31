@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { Grid } from 'semantic-ui-react'
 import FishStore from "../../../app/stores/fishStore";
 import { observer } from "mobx-react-lite";
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import FishDetailedHeader from './FishDetailedHeader';
 import FishDetailedInfo from './FishDetailedInfo';
