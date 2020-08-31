@@ -1,9 +1,25 @@
 //this file is where we will define all api calls
 import axios, { AxiosResponse } from 'axios';
 import { IFish } from '../models/fish';
+import { history } from '../..';
 
 //every request will use this base url
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+//an interceptor to intercept errors coming back from the server
+axios.interceptors.response.use(undefined, error=>{
+  //destructure our error so we don't have to type out error.response.whatever
+  const {status, data, config} = error.response;
+  //check if it's a not found error
+  if(status === 404){
+    history.push('/notfound');
+  }
+  //if all of these conditions are true, that probably means the user sent a get request with an id that isn't a guid
+  //a get request like that will return a 400, not a 404, so we need to catch these errors too and also send them to the not found page
+  if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')){
+    history.push('/notfound');
+  }
+})
 
 //store our requests in this constant
 const responseBody = (response: AxiosResponse) => response.data;

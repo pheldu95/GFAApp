@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -58,9 +60,11 @@ namespace Application.FishCaught
                 //get the fish we are editing from the db
                 var fish = await _context.FishCaught.FindAsync(request.Id);
 
-                if(fish == null)
-                    throw new Exception("Couldnt find fish");
-                
+                //if we don't have a fish with specific id, then we throw exception
+                if (fish == null)
+                    //here is where we use our error handling that we made, RestException
+                    throw new RestException(HttpStatusCode.NotFound, new { fish = "Not found" });
+
                 //check to see if any of these variables have changed. 
                 //if they have, then it updates the fish object with the new values
                 //request.FisherId, for example, will be null if the user hasn't changed it

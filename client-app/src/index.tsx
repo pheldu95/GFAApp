@@ -2,16 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter} from 'react-router-dom';
+import {Router} from 'react-router-dom';
+import {createBrowserHistory} from 'history';
 import ScrollToTop from './app/layout/ScrollToTop';
-
+//make our own history object that axios or mobx can access
+//will we use this to direct users to the notfound component whenever we get a 404
+//we will import history into our agent.ts file and use it to history.push('/notfound'). redirect users to not found page
+export const history = createBrowserHistory();
 ReactDOM.render(
-  <BrowserRouter>
-  {/* wrap ScrollToTop around the App component */}
+  //make our history object available to the Router
+  <Router history={history}>
+  {/* wrap ScrollToTop around the App component. loading new component scrolls to top of page */}
     <ScrollToTop>
       <App />
     </ScrollToTop>
-  </BrowserRouter>,
+  </Router>,
   document.getElementById('root')
 );
 

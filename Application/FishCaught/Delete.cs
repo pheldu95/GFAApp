@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -26,8 +28,9 @@ namespace Application.FishCaught
                 var fish = await _context.FishCaught.FindAsync(request.Id);
 
                 //if we don't have a fish with specific id, then we throw exception
-                if(fish.Id == null)
-                    throw new Exception("Can't find fish to delete");
+                if(fish == null)
+                    //here is where we use our error handling that we made, RestException
+                    throw new RestException(HttpStatusCode.NotFound, new {fish="Not found"});
                 
                 //if we do have the fish, then we remove it from our context
                 _context.Remove(fish);

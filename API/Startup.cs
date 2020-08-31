@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Middleware;
 using Application.FishCaught;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -51,10 +52,13 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //introduce our own error handling middlware
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             if (env.IsDevelopment())
             {
                 //return developer exception page if we get an error
-                app.UseDeveloperExceptionPage();
+                //commented out so we can use our own error handling middleware instead of the built in one
+                // app.UseDeveloperExceptionPage();
             }
 
             // app.UseHttpsRedirection();

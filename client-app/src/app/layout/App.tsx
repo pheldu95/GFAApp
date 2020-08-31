@@ -4,10 +4,11 @@ import NavBar from '../../features/nav/NavBar';
 import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtDashboard';
 import './styles.css'
 import {observer} from 'mobx-react-lite';
-import { Route, withRouter, RouteComponentProps } from 'react-router-dom';
+import { Route, withRouter, RouteComponentProps, Switch } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import FishForm from '../../features/fishCaught/form/FishForm';
 import FishDetails from '../../features/fishCaught/details/FishDetails';
+import NotFound from './NotFound';
 
 //bringing in location as a prop so we can use it as a key on our FishForm route
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -22,12 +23,16 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
           <Fragment>
             <NavBar />
             <Container style={{ marginTop: "7em" }}>
-              <Route exact path="/fishCaught" component={FishCaughtDashboard} />
-              <Route path="/fishCaught/:id" component={FishDetails} />
-              {/* can pass an array of routes into the same component
-              to load the same component for different routes. like create and edit(manage) */}
-              {/* whenever the location key changes, the FishForm reinitializes */}
-              <Route key={location.key} path={['/createFish', '/manage/:id']} component={FishForm} />
+              {/* <Switch> makes it so each Route is exclusive, and cannot be displayed at the same time */}
+              <Switch>
+                <Route exact path="/fishCaught" component={FishCaughtDashboard} />
+                <Route path="/fishCaught/:id" component={FishDetails} />
+                {/* can pass an array of routes into the same component
+                to load the same component for different routes. like create and edit(manage) */}
+                {/* whenever the location key changes, the FishForm reinitializes */}
+                <Route key={location.key} path={['/createFish', '/manage/:id']} component={FishForm} />
+                <Route component={NotFound} />
+              </Switch>
             </Container>
           </Fragment>
       )}/>
