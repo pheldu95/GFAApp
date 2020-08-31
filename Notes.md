@@ -85,3 +85,16 @@ Fluent Validation
 use nuget package manager to add FLuentValidation.ASP.Net Core 8.5.1 to Application project
 If you get an error, go up to root folder and dotnet restore and then dotnet build. in the console
 The FluentValidation class goes between the Command and the Handler.
+
+
+React Toastify
+------------------
+we can use toasts to show little warnings to the user. like if they get e 500 error
+npm install react-toastify
+import the css file to indext.tsx:
+import 'react-toastify/dist/ReactToastify.min.css';
+add this to the interceptor in agent.tsx:
+if(status === 500) {
+    //send a toast to the user
+    toast.error('Server error - check the terminal for more info');
+  }

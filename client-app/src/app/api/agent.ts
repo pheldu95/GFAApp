@@ -2,6 +2,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { IFish } from '../models/fish';
 import { history } from '../..';
+import { toast } from 'react-toastify';
 
 //every request will use this base url
 axios.defaults.baseURL = "http://localhost:5000/api";
@@ -18,6 +19,10 @@ axios.interceptors.response.use(undefined, error=>{
   //a get request like that will return a 400, not a 404, so we need to catch these errors too and also send them to the not found page
   if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')){
     history.push('/notfound');
+  }
+  if(status === 500) {
+    //send a toast to the user
+    toast.error('Server error - check the terminal for more info');
   }
 })
 

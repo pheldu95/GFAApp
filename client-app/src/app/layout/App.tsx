@@ -9,12 +9,14 @@ import HomePage from '../../features/home/HomePage';
 import FishForm from '../../features/fishCaught/form/FishForm';
 import FishDetails from '../../features/fishCaught/details/FishDetails';
 import NotFound from './NotFound';
+import {ToastContainer} from 'react-toastify';
 
 //bringing in location as a prop so we can use it as a key on our FishForm route
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   return (
     <Fragment>
+      <ToastContainer position='bottom-right'/>
       <Route exact path="/" component={HomePage} />
       {/* when the route has a / and anything else after it, it will hit the Route below
       that's what the /(.+) means */}

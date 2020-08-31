@@ -4,6 +4,8 @@ import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
 import {Router} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
+import 'react-toastify/dist/ReactToastify.min.css';
+import './app/layout/styles.css';
 import ScrollToTop from './app/layout/ScrollToTop';
 //make our own history object that axios or mobx can access
 //will we use this to direct users to the notfound component whenever we get a 404
