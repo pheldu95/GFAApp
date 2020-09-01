@@ -7,6 +7,13 @@ import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from 'react-router-dom';
 import { Form as FinalForm, Field} from 'react-final-form';
 import TextInput from '../../../app/common/form/TextInput';
+import NumberInput from '../../../app/common/form/NumberInput';
+import TextAreaInput from '../../../app/common/form/TextAreaInput';
+import SelectInput from '../../../app/common/form/SelectInput';
+import { fishTypeOptions } from '../../../app/common/options/fishTypeOptions';
+import { skyTypeOptions } from '../../../app/common/options/skyTypeOptions';
+import { windTypeOptions } from '../../../app/common/options/windTypeOptions';
+import { waterTypeOptions } from '../../../app/common/options/waterTypeOptions';
 
 //tell the component that there witll be an id. in match.params.id
 interface DetailParams{
@@ -83,178 +90,176 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
         console.log(values);
     }
 
-    const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        
-        //event.currentTarget is the same as event.target, except it is for FormEvents, instead of ChangeEvents. We use FormEvent b/c we have a text area for our description
-        //destructure event so that we dont have to type out event.currentTarget.name and event.currentTarget.value
-        const { name, value } = event.currentTarget;
-        //if value can be converted to a number, then convert it
-        //or else the db won't like it coming in as a string and we will get an error
-        if(Number(value)){
-            setFish({
-                ...fish,
-                [name]: Number(value)
-            })
-            //if it's not a number, then that's fine, leave it as a string
-        }else{
-            //setActiviy is like using this.setState in class components
-            setFish({
-                ...fish,
-                [name]: value
-            })
-        }
+    // const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        
+    //     //event.currentTarget is the same as event.target, except it is for FormEvents, instead of ChangeEvents. We use FormEvent b/c we have a text area for our description
+    //     //destructure event so that we dont have to type out event.currentTarget.name and event.currentTarget.value
+    //     const { name, value } = event.currentTarget;
+    //     //if value can be converted to a number, then convert it
+    //     //or else the db won't like it coming in as a string and we will get an error
+    //     if(Number(value)){
+    //         setFish({
+    //             ...fish,
+    //             [name]: Number(value)
+    //         })
+    //         //if it's not a number, then that's fine, leave it as a string
+    //     }else{
+    //         //setActiviy is like using this.setState in class components
+    //         setFish({
+    //             ...fish,
+    //             [name]: value
+    //         })
+    //     }
         
-    }
+    // }
     return (
       <Grid>
         <Grid.Column widht={10}>
           <Segment clearing>
-              {/* this is from react-final-form */}
-              {/* we pass our form into render inside <FinalForm render={}/> */}
-            <FinalForm 
-                onSubmit={handleFinalFormSubmit}
-                render={({handleSubmit}) => (
-                    <Form onSubmit={handleSubmit}>
-                      <Field
-                        name="fisherId"
-                        type="number"
-                        placeholder="Fisher Id"
-                        value={fish.fisherId}
-                        component='input'
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="guideId"
-                        type="number"
-                        placeholder="Guide Id"
-                        value={fish.guideId}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="organizationId"
-                        type="number"
-                        placeholder="Organization Id"
-                        value={fish.organizationId}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="fishTypeId"
-                        type="number"
-                        placeholder="Fish Type"
-                        value={fish.fishTypeId}
-                      />
-                      {/* <Form.Field label='Fish Species' control='select'>
+            {/* this is from react-final-form */}
+            {/* we pass our form into render inside <FinalForm render={}/> */}
+            <FinalForm
+              onSubmit={handleFinalFormSubmit}
+              render={({ handleSubmit }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Field
+                    name="fisherId"
+                    type="number"
+                    placeholder="Fisher Id"
+                    value={fish.fisherId}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="guideId"
+                    type="number"
+                    placeholder="Guide Id"
+                    value={fish.guideId}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="organizationId"
+                    type="number"
+                    placeholder="Organization Id"
+                    value={fish.organizationId}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="fishTypeId"
+                    options={fishTypeOptions}
+                    placeholder="Fish Type"
+                    value={fish.fishTypeId}
+                    component={SelectInput}
+                  />
+                  {/* <Form.Field label='Fish Species' control='select'>
                     <option value = {1}>Bass</option> 
                     <option value={2}>Lake Trout</option> 
                 </Form.Field> */}
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="length"
-                        type="number"
-                        placeholder="Length"
-                        value={fish.length}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="weight"
-                        type="number"
-                        placeholder="Weight"
-                        value={fish.weight}
-                      />
-                      <Form.Checkbox
-                        onChange={handleInputChange}
-                        label="Exceptional Catch?"
-                      />
-                      <Form.Checkbox
-                        onChange={handleInputChange}
-                        label="Unusual Catch?"
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="latitude"
-                        type="number"
-                        placeholder="Latitude"
-                        value={fish.latitude}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="longitude"
-                        type="number"
-                        placeholder="Longitude"
-                        value={fish.longitude}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="skyTypeId"
-                        type="number"
-                        placeholder="Sky Type Id"
-                        value={fish.skyTypeId}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="windTypeId"
-                        type="number"
-                        placeholder="windTypeId"
-                        value={fish.windTypeId}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="waterTypeId"
-                        type="number"
-                        placeholder="waterTypeId"
-                        value={fish.waterTypeId}
-                      />
-                      <Field
-                        name="moonPhase"
-                        placeholder="Moon Phase"
-                        value={fish.moonPhase}
-                        component={TextInput}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="moonIlluminationPercent"
-                        type="number"
-                        placeholder="moonIlluminationPercent"
-                        value={fish.moonIlluminationPercent}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="airTemperature"
-                        type="number"
-                        placeholder="airTemperature"
-                        value={fish.airTemperature}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="waterTemperature"
-                        type="number"
-                        placeholder="waterTemperature"
-                        value={fish.waterTemperature}
-                      />
-                      <Form.Input
-                        onChange={handleInputChange}
-                        name="caughtDate"
-                        type="datetime-local"
-                        placeholder="Date"
-                        value={fish.caughtDate}
-                      />
-                      {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
-                      <Button
-                        loading={submitting}
-                        floated="right"
-                        positive
-                        type="submit"
-                        content="Submit"
-                      />
-                      <Button
-                        onClick={() => history.push("/fishCaught")}
-                        floated="right"
-                        type="button"
-                        content="Cancel"
-                      />
-                    </Form>
-                )}
+                  <Field
+                    name="length"
+                    type="number"
+                    placeholder="Length"
+                    value={fish.length}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="weight"
+                    type="number"
+                    placeholder="Weight"
+                    value={fish.weight}
+                    component={NumberInput}
+                  />
+                  <Form.Checkbox label="Exceptional Catch?" />
+                  <Form.Checkbox label="Unusual Catch?" />
+                  <Field
+                    name="latitude"
+                    type="number"
+                    placeholder="Latitude"
+                    value={fish.latitude}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="longitude"
+                    type="number"
+                    placeholder="Longitude"
+                    value={fish.longitude}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="skyTypeId"
+                    options={skyTypeOptions}
+                    placeholder="Sky Type"
+                    value={fish.skyTypeId}
+                    component={SelectInput}
+                  />
+                  <Field
+                    name="windTypeId"
+                    options={windTypeOptions}
+                    placeholder="Wind Type"
+                    value={fish.windTypeId}
+                    component={SelectInput}
+                  />
+                  <Field
+                    name="waterTypeId"
+                    options={waterTypeOptions}
+                    placeholder="waterTypeId"
+                    value={fish.waterTypeId}
+                    component={SelectInput}
+                  />
+                  <Field
+                    name="moonPhase"
+                    placeholder="Moon Phase"
+                    value={fish.moonPhase}
+                    component={TextInput}
+                  />
+                  <Field
+                    name="moonIlluminationPercent"
+                    type="number"
+                    placeholder="moonIlluminationPercent"
+                    value={fish.moonIlluminationPercent}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="airTemperature"
+                    type="number"
+                    placeholder="airTemperature"
+                    value={fish.airTemperature}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="waterTemperature"
+                    type="number"
+                    placeholder="waterTemperature"
+                    value={fish.waterTemperature}
+                    component={NumberInput}
+                  />
+                  <Field
+                    name="caughtDate"
+                    placeholder="Date"
+                    value={fish.caughtDate}
+                    component={TextInput}
+                  />
+                  <Field
+                    name="notes"
+                    placeholder="Notes"
+                    rows={3}
+                    component={TextAreaInput}
+                  />
+                  {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
+                  <Button
+                    loading={submitting}
+                    floated="right"
+                    positive
+                    type="submit"
+                    content="Submit"
+                  />
+                  <Button
+                    onClick={() => history.push("/fishCaught")}
+                    floated="right"
+                    type="button"
+                    content="Cancel"
+                  />
+                </Form>
+              )}
             />
-            
           </Segment>
         </Grid.Column>
       </Grid>
