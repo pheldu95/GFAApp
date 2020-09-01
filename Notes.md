@@ -107,3 +107,36 @@ package that helps us write reusable componenets for our form
 also helps with validation. makes it easy
 in the client-app: 
 npm install react-final-form final-form
+
+React Widgets and date-fns
+---------------------------
+npm install react-widgets react-widgets-date-fns
+will get a warning. the safest thing to do is install this version:
+npm install react-widgets@4.4.11 react-widgets-date-fns@4.0.26 date-fns@2.0.0-alpha.13
+
+when using react widgets, also need to add some css to index.tsx:
+import 'react-widgets/dist/css/react-widgets.css'
+
+then we need to create the localizer for date-fns
+first add this import to index.tsx:
+
+import dateFnsLocalizer from 'react-widgets-date-fns';
+
+then add the function to index.tsx:
+
+dateFnsLocalizer();
+
+will get an error. to fix the error, add a new declaration file containg react-widgets-date-fns
+how to do this: 
+make a new folder in client-app called typings-custom
+then add a file named react-widgets-date-fns.d.ts to the folder
+add this line to the file:
+
+declare module 'react-widgets-date-fns';
+
+next we have to tell our program to look for this file
+go to tsconfig.json and add this line to the include array:
+
+    "./typings-custom/**/*.ts"
+
+Now our program will know to look in that file as well for any declarations

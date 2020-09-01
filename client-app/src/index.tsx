@@ -5,8 +5,14 @@ import * as serviceWorker from './serviceWorker';
 import {Router} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import 'react-toastify/dist/ReactToastify.min.css';
+import "react-widgets/dist/css/react-widgets.css";
 import './app/layout/styles.css';
 import ScrollToTop from './app/layout/ScrollToTop';
+import dateFnsLocalizer from "react-widgets-date-fns";
+
+//from date-fns
+dateFnsLocalizer();
+
 //make our own history object that axios or mobx can access
 //will we use this to direct users to the notfound component whenever we get a 404
 //we will import history into our agent.ts file and use it to history.push('/notfound'). redirect users to not found page
