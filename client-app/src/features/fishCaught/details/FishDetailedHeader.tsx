@@ -3,6 +3,7 @@ import { Segment, Item, Header, Button, Image } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
+import { format } from "date-fns";
 
 
 const fishImageStyle = {
@@ -32,7 +33,7 @@ const FishDetailedHeader: React.FC<{fish: IFish}> = ({fish}) => {
                                     content= {`Fish: ${fish.fishTypeId}`}
                                     style={{ color: 'white' }}
                                 />
-                                <p>{fish.caughtDate}</p>
+                                <p>{format(fish.caughtDate, 'eeee do MMMM')}</p>
                                 <p>
                                     Caught by <strong>{fish.fisherId}</strong>
                                 </p>

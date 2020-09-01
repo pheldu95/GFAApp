@@ -1,6 +1,6 @@
 import React, {useState, FormEvent, useContext, useEffect } from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react'
-import { IFish } from '../../../app/models/fish';
+import { IFishFormValues, FishFormValues } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
 import FishStore from '../../../app/stores/fishStore';
 import { observer } from 'mobx-react-lite';
@@ -14,6 +14,8 @@ import { fishTypeOptions } from '../../../app/common/options/fishTypeOptions';
 import { skyTypeOptions } from '../../../app/common/options/skyTypeOptions';
 import { windTypeOptions } from '../../../app/common/options/windTypeOptions';
 import { waterTypeOptions } from '../../../app/common/options/waterTypeOptions';
+import DateInput from '../../../app/common/form/DateInput';
+import { combineDateAndTime } from '../../../app/common/util/util';
 
 //tell the component that there witll be an id. in match.params.id
 interface DetailParams{
@@ -23,49 +25,27 @@ interface DetailParams{
 const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}) => {
     const fishStore = useContext(FishStore);
     const { createFish, editFish, submitting, fish: initialFormState, loadFish, clearFish } =fishStore
-   
-    const [fish, setFish] = useState<IFish>({
-        //this is the initial state
-        id: '',
-        fisherId: 0,
-        guideId: 0,
-        organizationId: 0,
-        fishTypeId: 0,
-        length: 0,
-        weight: 0,
-        exceptionalCatch: false,
-        unusualCatch: false,
-        latitude: 0,
-        longitude: 0,
-        skyTypeId: 0,
-        windTypeId: 0,
-        waterTypeId: 0,
-        moonPhase: '',
-        moonIlluminationPercent: 0,
-        airTemperature: 0,
-        waterTemperature: 0,
-        caughtDate: '',
-        lastModifiedDate: '2020-08-14T17:33'
-    });
 
+    //use the IFishFormValues instead of IFish
+    const [fish, setFish] = useState(new FishFormValues());
+    //this is for our loading indicator
+    const [loading, setLoading] = useState(false);
     //load the fish specified in the url on page load
     //we can use .then() because the loadFish method from fishStore is async
     useEffect(() => {
-        if (match.params.id && fish.id.length === 0){
+        if (match.params.id){
+          setLoading(true);
             loadFish(match.params.id).then(
-                //the && is used to say that we will only setFish if the initialFormState exists
                 //if it's undefined, then it won't setFish
-                () => initialFormState && setFish(initialFormState))
+                //we use our constructor to make a new instance of the FishFormValues class
+                //and setFish to set fish in state to the FishFormValues
+                (fish) => setFish(new FishFormValues(fish))
+            ).finally(() => setLoading(false));
         }
-        //the commented out code isn't working. not sure why
-        //but app seems to work without it
-        //return a function that will handle clean up
-        //it will clear our fish from the fishStore
-        // return() => {
-        //     clearFish();
-        // }
+        
         //add the things we are using to the dependencies
-    }, [loadFish, clearFish, match.params.id, initialFormState, fish.id.length])
+        //useEffect will only run if loadFish or match.params.id has changed
+    }, [loadFish, match.params.id])
 
 
     // const handleSubmit = () =>{
@@ -87,7 +67,15 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
     // }
 
     const handleFinalFormSubmit = (values: any) => {
-        console.log(values);
+        const dateAndTime = combineDateAndTime(values.caughtDate, values.caughtTime);
+        //use the spread operator to ommit date and time from values.
+        //then we will add back the combined date and time
+        const {date, time, ...fish} = values;
+        //...fish in the spread operator created a new object called fish
+        //with all the properties from values except for date and time.
+        //so now we can add the caughtDate as dateAndTime
+        fish.caughtDate = dateAndTime
+        console.log(fish);
     }
 
     // const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        
@@ -118,9 +106,11 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
             {/* this is from react-final-form */}
             {/* we pass our form into render inside <FinalForm render={}/> */}
             <FinalForm
+              // can use initialValues for react final form to easily give the inputs an initial value
+              initialValues={fish}
               onSubmit={handleFinalFormSubmit}
               render={({ handleSubmit }) => (
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} loading={loading}>
                   <Field
                     name="fisherId"
                     type="number"
@@ -231,12 +221,24 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
                     value={fish.waterTemperature}
                     component={NumberInput}
                   />
-                  <Field
-                    name="caughtDate"
-                    placeholder="Date"
-                    value={fish.caughtDate}
-                    component={TextInput}
-                  />
+                  <Form.Group widths="equal">
+                    {/* making date={true} will make it a date input, not time. and vice versa on the time input making time={true} */}
+                    <Field
+                      name="caughtDate"
+                      placeholder="Date"
+                      date={true}
+                      value={fish.caughtDate}
+                      component={DateInput}
+                    />
+                    <Field
+                      name="caughtTime"
+                      placeholder="Time"
+                      time={true}
+                      value={fish.caughtTime}
+                      component={DateInput}
+                    />
+                  </Form.Group>
+
                   <Field
                     name="notes"
                     placeholder="Notes"
@@ -246,6 +248,8 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
                   {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
                   <Button
                     loading={submitting}
+                    //if the page is loading, the button will not show up yet. using disabled and the loading bool from our state
+                    disabled={loading}
                     floated="right"
                     positive
                     type="submit"
@@ -253,6 +257,7 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
                   />
                   <Button
                     onClick={() => history.push("/fishCaught")}
+                    disabled={loading}
                     floated="right"
                     type="button"
                     content="Cancel"

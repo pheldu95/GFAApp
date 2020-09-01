@@ -27,12 +27,14 @@ class FishStore{
     groupFishCaughtByDate(fishCaught: IFish[]){
         //sort the fish by latest fish caught.
         const sortedFishCaught = fishCaught.sort(
-            (b, a) => Date.parse(a.caughtDate) - Date.parse(b.caughtDate) 
+            //have to use .getTime so that we can use the sort function
+            (b, a) => a.caughtDate.getTime() - b.caughtDate.getTime()
         )
         //for each fish, it gives us a new array where the first item is the key and the second item is the fish
         //reduce method will run another 'callback function' on each element in the array of arrays
         return Object.entries(sortedFishCaught.reduce((fishCaught, fish)=>{
-            const date = fish.caughtDate.split('T')[0]; //split the date so we just have the date, not the time
+            //have to use toIsoString to make the date a string so we can then split it
+            const date = fish.caughtDate.toISOString().split('T')[0]; //split the date so we just have the date, not the time
             //if the date is the same, then we use the spread operator to group the fish
             fishCaught[date] = fishCaught[date] ? [...fishCaught[date], fish] : [fish];
             return fishCaught;
@@ -53,7 +55,8 @@ class FishStore{
                 //loop through and reformat date
                 //then add the fish to the fishCaught observable array
                 fishCaught.forEach(fish => {
-                    fish.caughtDate = fish.caughtDate.split('.')[0];
+                    //turn it into a Date object
+                    fish.caughtDate = new Date(fish.caughtDate);
                     //the fishRegistry needs a key and a value, so we pass it the id of the fish and the fish itself
                     this.fishRegistry.set(fish.id, fish);
                 });
@@ -75,15 +78,19 @@ class FishStore{
         //if there is a fish in the registry, then that becomes the selected fish
         if(fish){
             this.fish = fish;
+            return fish;
         //if there isn't a fish in the registry, then we have to go get it
         }else{
             this.loadingInitial = true;
             try {
                 fish = await agent.FishCaught.details(id);
                 runInAction('getting individual fish', () => {
+                    //turn it into a JavaScript Date object
+                    fish.caughtDate = new Date(fish.caughtDate)
                     this.fish = fish;
                     this.loadingInitial = false;
                 })
+                return fish;
             } catch (error) {
                 runInAction('get fish error', () => {
                     this.loadingInitial = false;
