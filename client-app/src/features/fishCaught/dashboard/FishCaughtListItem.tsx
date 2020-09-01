@@ -1,13 +1,12 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Item, Button, Segment, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import FishStore from "../../../app/stores/fishStore";
 import { IFish } from '../../../app/models/fish';
 
 //React.FC<{fish: IFish}> is a way to give the component props without making an interface
 const FishCaughtListItem: React.FC<{fish: IFish}> = ({fish}) => {
-    const fishStore = useContext(FishStore);
-    const { deleteFish, submitting, target } = fishStore;
+    // const fishStore = useContext(FishStore);
+    // const { deleteFish, submitting, target } = fishStore;
 
     return (
         <Segment.Group>

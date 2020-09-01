@@ -2,6 +2,7 @@ import React from 'react'
 import { Segment, Item, Header, Button, Image } from 'semantic-ui-react'
 import { IFish } from '../../../app/models/fish';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 
 const fishImageStyle = {
@@ -43,9 +44,9 @@ const FishDetailedHeader: React.FC<{fish: IFish}> = ({fish}) => {
             <Segment clearing attached='bottom'>
                 <Button color='teal'>Join Activity</Button>
                 <Button>Cancel attendance</Button>
-                <Button color='orange' floated='right'>
-                    Manage Event
-        </Button>
+                <Button as={Link} to={`/manage/${fish.id}`} color='orange' floated='right'>
+                    Edit Info
+                </Button>
             </Segment>
         </Segment.Group>
     )

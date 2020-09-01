@@ -1,6 +1,8 @@
 entity framework migration in console example:
 dotnet ef migrations add "added FishTypeId" -p Persistence/ -s API/
 
+how to drop the database:
+dotnet ef database drop -p Persistence/ -s API/
 ----------
 how to rename columns: https://stackoverflow.com/questions/13104592/how-to-rename-a-database-column-in-entity-framework-5-code-first-migrations-with/34445040
 
@@ -98,3 +100,10 @@ if(status === 500) {
     //send a toast to the user
     toast.error('Server error - check the terminal for more info');
   }
+
+React Final Form
+-------------------
+package that helps us write reusable componenets for our form
+also helps with validation. makes it easy
+in the client-app: 
+npm install react-final-form final-form

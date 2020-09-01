@@ -25,8 +25,9 @@ class FishStore{
     }
 
     groupFishCaughtByDate(fishCaught: IFish[]){
+        //sort the fish by latest fish caught.
         const sortedFishCaught = fishCaught.sort(
-            (a, b) => Date.parse(a.caughtDate) - Date.parse(b.caughtDate) 
+            (b, a) => Date.parse(a.caughtDate) - Date.parse(b.caughtDate) 
         )
         //for each fish, it gives us a new array where the first item is the key and the second item is the fish
         //reduce method will run another 'callback function' on each element in the array of arrays

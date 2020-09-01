@@ -5,6 +5,8 @@ import { v4 as uuid } from "uuid";
 import FishStore from '../../../app/stores/fishStore';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from 'react-router-dom';
+import { Form as FinalForm, Field} from 'react-final-form';
+import TextInput from '../../../app/common/form/TextInput';
 
 //tell the component that there witll be an id. in match.params.id
 interface DetailParams{
@@ -59,22 +61,26 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
     }, [loadFish, clearFish, match.params.id, initialFormState, fish.id.length])
 
 
-    const handleSubmit = () =>{
-        //if the id length is zero, that means it doesnt have an id, and is a new activity
-        //so we add the guid with the spread operator, andf then pass it to createFish
-        if(fish.id.length === 0){
-            let newFish = {
-                ...fish,
-                id: uuid()
-            }
-            //send the user to the details page for the new fish
-            createFish(newFish).then(() => history.push(`/fishCaught/${newFish.id}`));
-        }else{
-            //if the id length is greater than zero, that means we are editing. b/c already has an id
-            //so we just pass the fish to editFish
-            //then we send the user to the details page for the edited fish
-            editFish(fish).then(() => history.push(`/fishCaught/${fish.id}`));
-        }        
+    // const handleSubmit = () =>{
+    //     //if the id length is zero, that means it doesnt have an id, and is a new activity
+    //     //so we add the guid with the spread operator, andf then pass it to createFish
+    //     if(fish.id.length === 0){
+    //         let newFish = {
+    //             ...fish,
+    //             id: uuid()
+    //         }
+    //         //send the user to the details page for the new fish
+    //         createFish(newFish).then(() => history.push(`/fishCaught/${newFish.id}`));
+    //     }else{
+    //         //if the id length is greater than zero, that means we are editing. b/c already has an id
+    //         //so we just pass the fish to editFish
+    //         //then we send the user to the details page for the edited fish
+    //         editFish(fish).then(() => history.push(`/fishCaught/${fish.id}`));
+    //     }        
+    // }
+
+    const handleFinalFormSubmit = (values: any) => {
+        console.log(values);
     }
 
     const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        
@@ -99,41 +105,160 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
         
     }
     return (
-        <Grid>
-            <Grid.Column widht={10}>
-                <Segment clearing>
+      <Grid>
+        <Grid.Column widht={10}>
+          <Segment clearing>
+              {/* this is from react-final-form */}
+              {/* we pass our form into render inside <FinalForm render={}/> */}
+            <FinalForm 
+                onSubmit={handleFinalFormSubmit}
+                render={({handleSubmit}) => (
                     <Form onSubmit={handleSubmit}>
-                        <Form.Input onChange={handleInputChange} name='fisherId' type='number' placeholder='Fisher Id' value={fish.fisherId} />
-                        <Form.Input onChange={handleInputChange} name='guideId' type='number' placeholder='Guide Id' value={fish.guideId} />
-                        <Form.Input onChange={handleInputChange} name='organizationId' type='number' placeholder='Organization Id' value={fish.organizationId} />
-                        <Form.Input onChange={handleInputChange} name='fishTypeId' type='number' placeholder='Fish Type' value={fish.fishTypeId} />
-                        {/* <Form.Field label='Fish Species' control='select'>
+                      <Field
+                        name="fisherId"
+                        type="number"
+                        placeholder="Fisher Id"
+                        value={fish.fisherId}
+                        component='input'
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="guideId"
+                        type="number"
+                        placeholder="Guide Id"
+                        value={fish.guideId}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="organizationId"
+                        type="number"
+                        placeholder="Organization Id"
+                        value={fish.organizationId}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="fishTypeId"
+                        type="number"
+                        placeholder="Fish Type"
+                        value={fish.fishTypeId}
+                      />
+                      {/* <Form.Field label='Fish Species' control='select'>
                     <option value = {1}>Bass</option> 
                     <option value={2}>Lake Trout</option> 
                 </Form.Field> */}
-                        <Form.Input onChange={handleInputChange} name='length' type='number' placeholder='Length' value={fish.length} />
-                        <Form.Input onChange={handleInputChange} name='weight' type='number' placeholder='Weight' value={fish.weight} />
-                        <Form.Checkbox onChange={handleInputChange} label='Exceptional Catch?' />
-                        <Form.Checkbox onChange={handleInputChange} label='Unusual Catch?' />
-                        <Form.Input onChange={handleInputChange} name='latitude' type='number' placeholder='Latitude' value={fish.latitude} />
-                        <Form.Input onChange={handleInputChange} name='longitude' type='number' placeholder='Longitude' value={fish.longitude} />
-                        <Form.Input onChange={handleInputChange} name='skyTypeId' type='number' placeholder='Sky Type Id' value={fish.skyTypeId} />
-                        <Form.Input onChange={handleInputChange} name='windTypeId' type='number' placeholder='windTypeId' value={fish.windTypeId} />
-                        <Form.Input onChange={handleInputChange} name='waterTypeId' type='number' placeholder='waterTypeId' value={fish.waterTypeId} />
-                        <Form.Input onChange={handleInputChange} name='moonPhase' placeholder='Moon Phase' value={fish.moonPhase} />
-                        <Form.Input onChange={handleInputChange} name='moonIlluminationPercent' type='number' placeholder='moonIlluminationPercent' value={fish.moonIlluminationPercent} />
-                        <Form.Input onChange={handleInputChange} name='airTemperature' type='number' placeholder='airTemperature' value={fish.airTemperature} />
-                        <Form.Input onChange={handleInputChange} name='waterTemperature' type='number' placeholder='waterTemperature' value={fish.waterTemperature} />
-                        <Form.Input onChange={handleInputChange} name='caughtDate' type='datetime-local' placeholder='Date' value={fish.caughtDate} />
-                        {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
-                        <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
-                        <Button onClick={() => history.push('/fishCaught')} floated='right' type='button' content='Cancel' />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="length"
+                        type="number"
+                        placeholder="Length"
+                        value={fish.length}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="weight"
+                        type="number"
+                        placeholder="Weight"
+                        value={fish.weight}
+                      />
+                      <Form.Checkbox
+                        onChange={handleInputChange}
+                        label="Exceptional Catch?"
+                      />
+                      <Form.Checkbox
+                        onChange={handleInputChange}
+                        label="Unusual Catch?"
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="latitude"
+                        type="number"
+                        placeholder="Latitude"
+                        value={fish.latitude}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="longitude"
+                        type="number"
+                        placeholder="Longitude"
+                        value={fish.longitude}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="skyTypeId"
+                        type="number"
+                        placeholder="Sky Type Id"
+                        value={fish.skyTypeId}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="windTypeId"
+                        type="number"
+                        placeholder="windTypeId"
+                        value={fish.windTypeId}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="waterTypeId"
+                        type="number"
+                        placeholder="waterTypeId"
+                        value={fish.waterTypeId}
+                      />
+                      <Field
+                        name="moonPhase"
+                        placeholder="Moon Phase"
+                        value={fish.moonPhase}
+                        component={TextInput}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="moonIlluminationPercent"
+                        type="number"
+                        placeholder="moonIlluminationPercent"
+                        value={fish.moonIlluminationPercent}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="airTemperature"
+                        type="number"
+                        placeholder="airTemperature"
+                        value={fish.airTemperature}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="waterTemperature"
+                        type="number"
+                        placeholder="waterTemperature"
+                        value={fish.waterTemperature}
+                      />
+                      <Form.Input
+                        onChange={handleInputChange}
+                        name="caughtDate"
+                        type="datetime-local"
+                        placeholder="Date"
+                        value={fish.caughtDate}
+                      />
+                      {/* if submitting is true, then a loading icon will be displayed. b/c of loading={submitting} */}
+                      <Button
+                        loading={submitting}
+                        floated="right"
+                        positive
+                        type="submit"
+                        content="Submit"
+                      />
+                      <Button
+                        onClick={() => history.push("/fishCaught")}
+                        floated="right"
+                        type="button"
+                        content="Cancel"
+                      />
                     </Form>
-                </Segment>
-            </Grid.Column>
-        </Grid>
-        
-    )
+                )}
+            />
+            
+          </Segment>
+        </Grid.Column>
+      </Grid>
+    );
 }
 
 export default observer(FishForm);
