@@ -1,6 +1,6 @@
-import React, {useState, FormEvent, useContext, useEffect } from 'react'
+import React, {useState, useContext, useEffect } from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react'
-import { IFishFormValues, FishFormValues } from '../../../app/models/fish';
+import { FishFormValues } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
 import FishStore from '../../../app/stores/fishStore';
 import { observer } from 'mobx-react-lite';
@@ -16,6 +16,18 @@ import { windTypeOptions } from '../../../app/common/options/windTypeOptions';
 import { waterTypeOptions } from '../../../app/common/options/waterTypeOptions';
 import DateInput from '../../../app/common/form/DateInput';
 import { combineDateAndTime } from '../../../app/common/util/util';
+import {combineValidators, isRequired} from 'revalidate';
+
+//specify the field that you want to validate against
+//the package does the hard work for us
+//then we add validate to <FinalForm></FinalForm>
+const validate = combineValidators({
+  fisherId: isRequired({message: 'FisherId is required'}),
+  guideId: isRequired('guideId'),
+  fishTypeId: isRequired('fishTypeId'),
+  caughtDate: isRequired('caughtDate'),
+  caughtTime: isRequired('caughtTime')
+})
 
 //tell the component that there witll be an id. in match.params.id
 interface DetailParams{
@@ -24,7 +36,7 @@ interface DetailParams{
 
 const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}) => {
     const fishStore = useContext(FishStore);
-    const { createFish, editFish, submitting, fish: initialFormState, loadFish, clearFish } =fishStore
+    const { createFish, editFish, submitting, loadFish } = fishStore
 
     //use the IFishFormValues instead of IFish
     const [fish, setFish] = useState(new FishFormValues());
@@ -103,10 +115,13 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
             {/* this is from react-final-form */}
             {/* we pass our form into render inside <FinalForm render={}/> */}
             <FinalForm
+              //add our validation that we set up
+              validate={validate}
               // can use initialValues for react final form to easily give the inputs an initial value
               initialValues={fish}
               onSubmit={handleFinalFormSubmit}
-              render={({ handleSubmit }) => (
+              //invalid and pristine make it so the submit button is disabled if the form is invalid or in a pristine state(not been touched)
+              render={({ handleSubmit, invalid, pristine }) => (
                 <Form onSubmit={handleSubmit} loading={loading}>
                   <Field
                     name="fisherId"
@@ -246,14 +261,17 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
                   <Button
                     loading={submitting}
                     //if the page is loading, the button will not show up yet. using disabled and the loading bool from our state
-                    disabled={loading}
+                    //also will do this if the form is invalid or pristine
+                    disabled={loading || invalid || pristine}
                     floated="right"
                     positive
                     type="submit"
                     content="Submit"
                   />
                   <Button
-                    onClick={() => history.push("/fishCaught")}
+                    // if we have an id, that means we are editing, so we want to take them back to the details page
+                    //if we don't have an id, that means we are creating so we want to take the user back to the fish feed if they press cancel
+                    onClick={fish.id ? () => history.push(`/fishCaught/${fish.id}`) : () => history.push("/fishCaught")}
                     disabled={loading}
                     floated="right"
                     type="button"

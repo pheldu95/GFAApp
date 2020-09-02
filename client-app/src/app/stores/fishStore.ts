@@ -3,6 +3,7 @@ import { createContext, SyntheticEvent } from 'react';
 import { IFish } from '../models/fish';
 import agent from '../api/agent';
 import { history } from '../..';
+import { toast } from 'react-toastify';
 
 
 configure({enforceActions: 'always'});
@@ -89,6 +90,7 @@ class FishStore{
                     //turn it into a JavaScript Date object
                     fish.caughtDate = new Date(fish.caughtDate)
                     this.fish = fish;
+                    this.fishRegistry.set(fish.id, fish);
                     this.loadingInitial = false;
                 })
                 return fish;
@@ -117,6 +119,7 @@ class FishStore{
         //or else database won't tale them. this is the fix for now. probably a better one than this.
         fish.fisherId = Number(fish.fisherId);
         fish.guideId = Number(fish.guideId);
+        fish.organizationId = Number(fish.organizationId);
         console.log(fish);
         this.submitting = true;
         try {
@@ -130,7 +133,8 @@ class FishStore{
             runInAction('create activity error', () => {
                 this.submitting = false;
             })
-            console.log(error);
+            toast.error('Problem submitting data');
+            console.log(error.response);
         }
     }
 
@@ -148,7 +152,8 @@ class FishStore{
             runInAction('error editing fish', () => {
                 this.submitting = false;
             })
-            console.log(error);
+            toast.error('Problem submitting data');
+            console.log(error.response);
         }
     }
 

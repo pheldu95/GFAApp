@@ -145,3 +145,12 @@ Now our program will know to look in that file as well for any declarations
 
 also have to install the types to our client-app:
 npm install @types/react-widgets
+
+
+Revalidate
+--------------
+library for creating small validation functions
+creates a validation object for us
+we will use: combineValidators
+npm install revalidate, in client-app
+then npm install @types/revalidate

@@ -24,7 +24,9 @@ const DateInput: React.FC<IProps> = ({
         placeholder={placeholder}
         value={input.value || null}
         onChange={input.onChange}
+        //onBlur notifies the component that it's been touched
         onBlur={input.onBlur}
+        // prevents the user from typing characters into the date and time fields
         onKeyDown={(e) => e.preventDefault()}
         date={date}
         time={time}
