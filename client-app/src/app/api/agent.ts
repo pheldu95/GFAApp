@@ -25,10 +25,16 @@ axios.interceptors.response.use(undefined, error=>{
   if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')){
     history.push('/notfound');
   }
+  if(status === 400){
+    console.log(data.errors);
+    
+  }
+
   if(status === 500) {
     //send a toast to the user
     toast.error('Server error - check the terminal for more info');
   }
+  throw error;
 })
 
 //store our requests in this constant

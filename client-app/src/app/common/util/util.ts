@@ -11,7 +11,8 @@ export const combineDateAndTime = (date: Date, time: Date) => {
     const day = date.getDate();
     //combine the date info
     const dateString= `${year}-${month}-${day}`;
-
+    console.log(dateString, timeString);
+    
     //combine the date info with the time string
     return new Date(dateString + ' ' + timeString);
 }

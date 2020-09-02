@@ -47,35 +47,32 @@ const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}
         //useEffect will only run if loadFish or match.params.id has changed
     }, [loadFish, match.params.id])
 
-
-    // const handleSubmit = () =>{
-    //     //if the id length is zero, that means it doesnt have an id, and is a new activity
-    //     //so we add the guid with the spread operator, andf then pass it to createFish
-    //     if(fish.id.length === 0){
-    //         let newFish = {
-    //             ...fish,
-    //             id: uuid()
-    //         }
-    //         //send the user to the details page for the new fish
-    //         createFish(newFish).then(() => history.push(`/fishCaught/${newFish.id}`));
-    //     }else{
-    //         //if the id length is greater than zero, that means we are editing. b/c already has an id
-    //         //so we just pass the fish to editFish
-    //         //then we send the user to the details page for the edited fish
-    //         editFish(fish).then(() => history.push(`/fishCaught/${fish.id}`));
-    //     }        
-    // }
-
     const handleFinalFormSubmit = (values: any) => {
-        const dateAndTime = combineDateAndTime(values.caughtDate, values.caughtTime);
-        //use the spread operator to ommit date and time from values.
-        //then we will add back the combined date and time
-        const {date, time, ...fish} = values;
-        //...fish in the spread operator created a new object called fish
-        //with all the properties from values except for date and time.
-        //so now we can add the caughtDate as dateAndTime
-        fish.caughtDate = dateAndTime
-        console.log(fish);
+      const dateAndTime = combineDateAndTime(
+        values.caughtDate,
+        values.caughtTime
+      );
+      //use the spread operator to ommit date and time from values.
+      //then we will add back the combined date and time
+      const { caughtDate, caughtTime, ...fish } = values;
+      //...fish in the spread operator created a new object called fish
+      //with all the properties from values except for date and time.
+      //so now we can add the caughtDate as dateAndTime
+      fish.caughtDate = dateAndTime;
+      //if the id length is zero, that means it doesnt have an id, and is a new activity
+      //so we add the guid with the spread operator, andf then pass it to createFish
+      if(!fish.id){
+          let newFish = {
+              ...fish,
+              id: uuid()
+          }
+          //send the new fish to createFish in our fishstore
+          createFish(newFish);
+      }else{
+          //if the id length is greater than zero, that means we are editing. b/c already has an id
+          //so we just pass the fish to editFish
+          editFish(fish);
+      }
     }
 
     // const handleInputChange = (event: FormEvent<HTMLInputElement>) => {        

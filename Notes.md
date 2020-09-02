@@ -110,6 +110,8 @@ npm install react-final-form final-form
 
 React Widgets and date-fns
 ---------------------------
+date-fns has a Format function that makes it really easy to format our dates
+
 npm install react-widgets react-widgets-date-fns
 will get a warning. the safest thing to do is install this version:
 npm install react-widgets@4.4.11 react-widgets-date-fns@4.0.26 date-fns@2.0.0-alpha.13
@@ -140,3 +142,6 @@ go to tsconfig.json and add this line to the include array:
     "./typings-custom/**/*.ts"
 
 Now our program will know to look in that file as well for any declarations
+
+also have to install the types to our client-app:
+npm install @types/react-widgets

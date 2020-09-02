@@ -2,6 +2,7 @@ import { observable, action, computed, configure, runInAction } from 'mobx';
 import { createContext, SyntheticEvent } from 'react';
 import { IFish } from '../models/fish';
 import agent from '../api/agent';
+import { history } from '../..';
 
 
 configure({enforceActions: 'always'});
@@ -110,14 +111,21 @@ class FishStore{
     }
 
     @action createFish = async (fish: IFish) => {
+        console.log(fish);
+        fish.lastModifiedDate = new Date();
+        //values coming out of the inputs are still strings, so we have to convert them to numbers
+        //or else database won't tale them. this is the fix for now. probably a better one than this.
+        fish.fisherId = Number(fish.fisherId);
+        fish.guideId = Number(fish.guideId);
+        console.log(fish);
         this.submitting = true;
         try {
             await agent.FishCaught.create(fish);
             runInAction('creating activity', () => {
                 this.fishRegistry.set(fish.id, fish);
                 this.submitting = false;
-            })
-           
+            });
+           history.push(`/fishCaught/${fish.id}`);
         } catch (error) {
             runInAction('create activity error', () => {
                 this.submitting = false;
@@ -134,7 +142,8 @@ class FishStore{
                 this.fishRegistry.set(fish.id, fish);
                 this.fish = fish;
                 this.submitting = false;
-            })
+            });
+            history.push(`/fishCaught/${fish.id}`);
         } catch (error) {
             runInAction('error editing fish', () => {
                 this.submitting = false;
