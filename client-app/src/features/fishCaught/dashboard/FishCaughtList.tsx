@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from 'react'
-import { Item, Label } from 'semantic-ui-react'
+import { Item, Label, Divider, Header } from 'semantic-ui-react'
 import { observer } from "mobx-react-lite";
 import FishStore from "../../../app/stores/fishStore";
 import FishCaughtListItem from './FishCaughtListItem';
@@ -12,9 +12,14 @@ const FishCaughtList: React.FC = () => {
       <Fragment>
         {fishCaughtByDate.map(([group, fishCaught]) => (
           <Fragment key={group}>
-            <Label size='large' color='blue'>
+            <Divider horizontal>
+              <Header as='h4'>
+                {group}
+              </Header>
+            </Divider>
+            {/* <Label size='large' color='blue'>
               {group}
-            </Label>
+            </Label> */}
             <Item.Group divided>
               {fishCaught.map((fish) => (
                 <FishCaughtListItem key={fish.id} fish={fish} />

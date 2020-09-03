@@ -154,3 +154,30 @@ creates a validation object for us
 we will use: combineValidators
 npm install revalidate, in client-app
 then npm install @types/revalidate
+
+
+ASP.Net Core identity Notes
+------------------------
+membership system 
+supports login stored in identity
+supports facebook/google login
+Comes with default user stores:
+aspnetusers table can be put in our db
+UserManager -- allows us to create/find users
+SignInManager -- allows user to sign in
+hashes and salts password before it stores them. so user could have the same password
+
+in Domain, use nuget package manager to install 
+Microsoft.AspNetCore.Identity.EntityFrameworkCore
+We installed the 3.0 version into Domain
+
+How to use migrations to add Identity to our project
+dotnet ef migrations add "AddedIdentity" -p Persistence/ -s API/
+Automatically adds new tables to our db
+AspNetRoles and AspNetUsers as well as many others
+all because we derived from IdentityUser
+
+For .Net 3.0 we need to add this as well using nuget package manager
+Microsoft.AspNetCore.Identity.UI
+select 3.0.0
+and install it into API.csproj

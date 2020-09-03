@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Middleware;
 using Application.FishCaught;
+using Domain;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +48,17 @@ namespace API
                     //use validators on the Create class. If we add to Create, should do it for all classes automaticlly
                     cfg.RegisterValidatorsFromAssemblyContaining<Create>();
                 });
+            //adds and configures the identity system
+            //must specify user type, which will be the one we made, AppUser
+            var builder = services.AddIdentityCore<AppUser>();
+            //create new instance of identity builder class
+            //must pass it the user type, and the services we are adding. both come from builder
+            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            //add the entity framework stores. creates user stores we need
+            identityBuilder.AddEntityFrameworkStores<DataContext>();
+            //this gives our app the ability to create and manage users. as well as sign in manager
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            services.AddAuthentication();
             
         }
 
