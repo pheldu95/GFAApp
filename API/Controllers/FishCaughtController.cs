@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.FishCaught;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 //all these controllers do is receive requests and respond to them
@@ -24,6 +25,7 @@ namespace API.Controllers
 
         //method for a get request that calls our details handler
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Fish>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query{Id = id});

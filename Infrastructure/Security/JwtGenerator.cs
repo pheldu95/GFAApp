@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Application.Interfaces;
 using Domain;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Security
@@ -14,6 +15,14 @@ namespace Infrastructure.Security
     //this class will build our jwt token
     public class JwtGenerator : IJwtGenerator
     {
+        private readonly SymmetricSecurityKey _key;
+        //inject configuration so we can use our secret token key
+        //when we make the token
+        public JwtGenerator(IConfiguration config)
+        {
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+        }
+
         public string CreateToken(AppUser user)
         {
             var claims = new List<Claim>
@@ -22,9 +31,8 @@ namespace Infrastructure.Security
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
             };
             //generate signing credentials. allows our API to trust the tokens
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
             //we specify the algorithm that will decode our super secret key?
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

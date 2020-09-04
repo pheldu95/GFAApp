@@ -208,3 +208,7 @@ dotnet add reference ../Infrastructre
 in order to use JwtRegisteredClaimNames in JwtGenerator, we need to add another package
 >System.IdentityModel.Tokens.Jwt 5.5.0
 add to our infrastructe project
+
+when adding services.AddAuthentication(JwtBearerDefaults) to startup class, we need to add a package
+use nuget package manager to add 
+Microsoft.AspNetCore.Authentication.JwtBearer 3.0.0 to API project
