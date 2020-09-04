@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Middleware;
 using Application.FishCaught;
+using Application.Interfaces;
 using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,6 +61,8 @@ namespace API
             //this gives our app the ability to create and manage users. as well as sign in manager
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
             services.AddAuthentication();
+
+            services.AddScoped<IJwtGenerator,  JwtGenerator>();
             
         }
 

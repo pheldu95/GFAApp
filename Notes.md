@@ -181,3 +181,30 @@ For .Net 3.0 we need to add this as well using nuget package manager
 Microsoft.AspNetCore.Identity.UI
 select 3.0.0
 and install it into API.csproj
+
+
+JWT Token
+--------------------
+this token is passed to the client
+there is a header, payload, and verify signature
+the payload of the token is the data, or claims, stored inside the jwt. the nameid will be a users username.
+the verify signature is used by the server to make sure that the token is valid and hasn;'t been changed. there will be a secret key that is encoded. so we can authenticate our users after they ahve logged in and have a token
+
+Infrastructure project
+----------------------
+this project will be what generates our jwt token
+in GFAAPP
+dotnet new classlib -n Infrastructure
+dotnet sln add Infrastructure
+//add it to our solution
+
+add Application as a reference
+cd into Infrastructure folder
+dotnet add reference ../Application/
+//then add Infrastrucre as a dependency to API project
+cd into API folder
+dotnet add reference ../Infrastructre
+
+in order to use JwtRegisteredClaimNames in JwtGenerator, we need to add another package
+>System.IdentityModel.Tokens.Jwt 5.5.0
+add to our infrastructe project
