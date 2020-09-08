@@ -20,5 +20,10 @@ namespace API.Controllers
             //the query parameter will contain our username and password
             return await Mediator.Send(query);
         }
+        [HttpPost("register")]
+        public async Task<ActionResult<User>> Register(Register.Command command)
+        {
+            return await Mediator.Send(command);
+        }
     }
 }
