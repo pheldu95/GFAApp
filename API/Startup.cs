@@ -83,7 +83,8 @@ namespace API
                 });
 
             services.AddScoped<IJwtGenerator,  JwtGenerator>();
-            
+            //UserAccessor that we made gives us the ability to get a username out of a token
+            services.AddScoped<IUserAccessor, UserAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
