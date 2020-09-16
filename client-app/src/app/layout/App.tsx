@@ -13,6 +13,7 @@ import {ToastContainer} from 'react-toastify';
 import LoginForm from '../../features/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import { LoadingComponent } from './LoadingComponent';
+import ModalContainer from '../common/modals/ModalContainer';
 
 //bringing in location as a prop so we can use it as a key on our FishForm route
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -34,6 +35,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   return (
     <Fragment>
+      <ModalContainer/>
       <ToastContainer position='bottom-right'/>
       <Route exact path="/" component={HomePage} />
       {/* when the route has a / and anything else after it, it will hit the Route below

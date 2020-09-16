@@ -2,7 +2,8 @@ import { FORM_ERROR } from 'final-form'
 import React, { useContext } from 'react'
 import {Form as FinalForm, Field} from 'react-final-form'
 import { combineValidators, isRequired } from 'revalidate'
-import { Button, Form, Label } from 'semantic-ui-react'
+import { Button, Form, Header, Label } from 'semantic-ui-react'
+import ErrorMessage from '../../app/common/form/ErrorMessage'
 import TextInput from '../../app/common/form/TextInput'
 import { IUserFormValues } from '../../app/models/user'
 import { RootStoreContext } from '../../app/stores/rootStore'
@@ -36,7 +37,8 @@ const LoginForm = () => {
                 pristine,
                 dirtySinceLastSubmit
             })=>(
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} error>
+                    <Header as='h2' content='Login' color='olive' textAlign='center'/>
                     <Field
                         name='email'
                         component={TextInput}
@@ -50,10 +52,10 @@ const LoginForm = () => {
                         type='password'
                     />
                     {/* if there is a submitError, from react-final-form, we will display an errror label */}
-                    {submitError && !dirtySinceLastSubmit && <Label color='red' basic content={submitError.statusText}/>}
-                    <br/>
-                    <Button disabled={invalid && dirtySinceLastSubmit || pristine} loading={submitting} positive content='Login'/>
-                    <pre>{JSON.stringify(form.getState(), null, 2)}</pre>
+                    {submitError && !dirtySinceLastSubmit && 
+                        <ErrorMessage error={submitError} text='Invalid email or password'/>
+                    }
+                    <Button disabled={invalid && dirtySinceLastSubmit || pristine} loading={submitting} positive content='Login' fluid/>
                 </Form>
             )}
         />

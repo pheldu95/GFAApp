@@ -31,11 +31,23 @@ export default class UserStore{
             })
             //save the token in the browser. using our commonStore
             this.rootStore.commonStore.setToken(user.token);
+            this.rootStore.modalStore.closeModal();
             history.push('/fishCaught')
             
         }catch(error){
             throw error;
             
+        }
+    }
+
+    @action register = async (values: IUserFormValues) => {
+        try {
+            const user = await agent.User.register(values);
+            this.rootStore.commonStore.setToken(user.token);
+            this.rootStore.modalStore.closeModal();
+            history.push('/fishCaught');
+        }catch (error){
+            throw error;
         }
     }
 
