@@ -78,5 +78,6 @@ const User = {
 
 //export our FishCaught object so we can use the requests in our components
 export default {
-    FishCaught
+    FishCaught,
+    User
 }
