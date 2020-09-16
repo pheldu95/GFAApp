@@ -35,7 +35,7 @@ axios.interceptors.response.use(undefined, error=>{
     //send a toast to the user
     toast.error('Server error - check the terminal for more info');
   }
-  throw error;
+  throw error.response;
 })
 
 //store our requests in this constant

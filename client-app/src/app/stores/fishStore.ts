@@ -1,13 +1,20 @@
-import { observable, action, computed, configure, runInAction } from 'mobx';
-import { createContext, SyntheticEvent } from 'react';
+import { observable, action, computed, runInAction } from 'mobx';
+import { SyntheticEvent } from 'react';
 import { IFish } from '../models/fish';
 import agent from '../api/agent';
 import { history } from '../..';
 import { toast } from 'react-toastify';
+import { RootStore } from './rootStore';
 
 
-configure({enforceActions: 'always'});
-class FishStore{
+export default class FishStore{
+
+    //make the rootStore accessible from within the fishStore
+    rootStore: RootStore;
+    constructor(rootStore: RootStore){
+        this.rootStore = rootStore
+    }
+
     //will store our fish in an observable map. this way it will also update when we delete a fish
     @observable fishRegistry = new Map();
     //fish can be IFish or null
@@ -186,4 +193,3 @@ class FishStore{
    
 }
 
-export default createContext(new FishStore())

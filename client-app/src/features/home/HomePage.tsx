@@ -11,8 +11,8 @@ const HomePage = () => {
                       Grantsburg Fishing Association
                   </Header>
                 <Header as='h2' inverted content='Welcome to the GFA Fish Feed!' />
-                <Button as={Link} to='/fishCaught' size='huge' inverted>
-                   Fish Feed
+                <Button as={Link} to='/login' size='huge' inverted>
+                   Login
                 </Button>
             </Container>
         </Segment>

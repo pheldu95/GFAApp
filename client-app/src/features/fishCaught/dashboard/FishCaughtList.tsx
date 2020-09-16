@@ -1,12 +1,12 @@
 import React, { useContext, Fragment } from 'react'
-import { Item, Label, Divider, Header } from 'semantic-ui-react'
+import { Item, Divider, Header } from 'semantic-ui-react'
 import { observer } from "mobx-react-lite";
-import FishStore from "../../../app/stores/fishStore";
 import FishCaughtListItem from './FishCaughtListItem';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const FishCaughtList: React.FC = () => {
-    const fishStore = useContext(FishStore);
-    const { fishCaughtByDate } = fishStore;
+    const rootStore = useContext(RootStoreContext);
+    const { fishCaughtByDate } = rootStore.fishStore;
     return (
       
       <Fragment>

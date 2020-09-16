@@ -2,7 +2,6 @@ import React, {useState, useContext, useEffect } from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react'
 import { FishFormValues } from '../../../app/models/fish';
 import { v4 as uuid } from "uuid";
-import FishStore from '../../../app/stores/fishStore';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from 'react-router-dom';
 import { Form as FinalForm, Field} from 'react-final-form';
@@ -17,6 +16,7 @@ import { waterTypeOptions } from '../../../app/common/options/waterTypeOptions';
 import DateInput from '../../../app/common/form/DateInput';
 import { combineDateAndTime } from '../../../app/common/util/util';
 import {combineValidators, isRequired} from 'revalidate';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 //specify the field that you want to validate against
 //the package does the hard work for us
@@ -35,8 +35,8 @@ interface DetailParams{
 }
 
 const FishForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, history}) => {
-    const fishStore = useContext(FishStore);
-    const { createFish, editFish, submitting, loadFish } = fishStore
+    const rootStore = useContext(RootStoreContext);
+    const { createFish, editFish, submitting, loadFish } = rootStore.fishStore;
 
     //use the IFishFormValues instead of IFish
     const [fish, setFish] = useState(new FishFormValues());

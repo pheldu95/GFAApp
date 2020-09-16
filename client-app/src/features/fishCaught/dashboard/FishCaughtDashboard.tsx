@@ -3,23 +3,25 @@ import { Grid } from 'semantic-ui-react';
 import FishCaughtList from './FishCaughtList';
 import { observer } from "mobx-react-lite";
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
-import FishStore from '../../../app/stores/fishStore'
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const FishCaughtDashboard: React.FC = () => {
-  //make the FishStore from mobx available to this component
-  const fishStore = useContext(FishStore);
+  //make the RootStore from mobx available to this component
+  const rootStore = useContext(RootStoreContext);
+  //destructure the rootStore to get the properties we need
+  const {loadFishCaught, loadingInitial} = rootStore.fishStore
 
 
 
   //in functional component, use useEffect instead of componentDidMount
   useEffect(() => {
     //use our fishStore to get fish
-    fishStore.loadFishCaught();
+    loadFishCaught();
     //we add an array at the end. this makes the useEffect only run ones
-  }, [fishStore])
+  }, [loadFishCaught])
 
   //if the page is loading, then return this component instead of the return below
-  if (fishStore.loadingInitial) return <LoadingComponent content='Loading...' />
+  if (loadingInitial) return <LoadingComponent content='Loading...' />
 
   return (
     <Grid>

@@ -6,8 +6,6 @@ import {format} from 'date-fns';
 
 //React.FC<{fish: IFish}> is a way to give the component props without making an interface
 const FishCaughtListItem: React.FC<{fish: IFish}> = ({fish}) => {
-    // const fishStore = useContext(FishStore);
-    // const { deleteFish, submitting, target } = fishStore;
 
     return (
       <Segment.Group>

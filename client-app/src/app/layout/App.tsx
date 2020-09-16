@@ -10,6 +10,7 @@ import FishForm from '../../features/fishCaught/form/FishForm';
 import FishDetails from '../../features/fishCaught/details/FishDetails';
 import NotFound from './NotFound';
 import {ToastContainer} from 'react-toastify';
+import LoginForm from '../../features/user/LoginForm';
 
 //bringing in location as a prop so we can use it as a key on our FishForm route
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -33,6 +34,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 to load the same component for different routes. like create and edit(manage) */}
                 {/* whenever the location key changes, the FishForm reinitializes */}
                 <Route key={location.key} path={['/createFish', '/manage/:id']} component={FishForm} />
+                <Route path='/login' component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

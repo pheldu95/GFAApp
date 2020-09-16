@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react'
 import { Grid } from 'semantic-ui-react'
-import FishStore from "../../../app/stores/fishStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from 'react-router-dom';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
@@ -8,6 +7,7 @@ import FishDetailedHeader from './FishDetailedHeader';
 import FishDetailedInfo from './FishDetailedInfo';
 import FishDetailedChat from './FishDetailedChat';
 import FishDetailedSidebar from './FishDetailedSidebar';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 //make an interface with type that we can pass to our <RouteComponentProps>
 //if we don't do this, match.params will not know what id is. which is what we are passing in the url
@@ -17,9 +17,9 @@ interface DetailParams{
 //use React.FC<RouteComponentProps> so that we get access to the match object that will have our fish id in it
 //also bring in the history object to our destructured props. that way we can use it on the cancel button
 const FishCaughtDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
-    const fishStore = useContext(FishStore);
+    const rootStore = useContext(RootStoreContext);
     //destructure and rename selectedFish to fish
-    const { fish, loadFish, loadingInitial } = fishStore
+    const { fish, loadFish, loadingInitial } = rootStore.fishStore;
     
     //use useEffect to load our Fish on page load
     useEffect(() => {
