@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IFish } from '../models/fish';
 import { history } from '../..';
 import { toast } from 'react-toastify';
+import { IUser, IUserFormValues } from '../models/user';
 
 //every request will use this base url
 axios.defaults.baseURL = "http://localhost:5000/api";
@@ -63,6 +64,17 @@ const FishCaught = {
   update: (fish: IFish) => requests.put(`/fishCaught/${fish.id}`, fish),
   delete: (id: string) => requests.del(`/fishCaught/${id}`),
 };
+
+//object for all the user requests
+const User = {
+  //request for the current user
+  //returns a promise of type IUser
+  current: ():Promise<IUser> => requests.get('/user'),
+  //request for logging in
+  //takes a user object of type IUserFormValues
+  login: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/login`, user),
+  register: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/register`, user),
+}
 
 //export our FishCaught object so we can use the requests in our components
 export default {
