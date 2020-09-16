@@ -29,12 +29,34 @@ export default class UserStore{
             runInAction(() => {
                 this.user = user;
             })
-            console.log(user);
+            //save the token in the browser. using our commonStore
+            this.rootStore.commonStore.setToken(user.token);
             history.push('/fishCaught')
             
         }catch(error){
             throw error;
             
         }
+    }
+
+    @action getUser = async () => {
+        try{
+            //current gets our current user, based on the token
+            const user = await agent.User.current();
+            runInAction(() => {
+                this.user = user;
+            })
+        }catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+    //when the user logs out, all we have to do is set the token to null
+    @action logout = () => {
+        this.rootStore.commonStore.setToken(null);
+        this.user = null;
+        //send them back to the home page
+        history.push('/');
     }
 }

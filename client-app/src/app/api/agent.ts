@@ -8,6 +8,17 @@ import { IUser, IUserFormValues } from '../models/user';
 //every request will use this base url
 axios.defaults.baseURL = "http://localhost:5000/api";
 
+//this makes it so every time we make a request, axios will check if we have a token
+//if we have one, it will attach it to our authorization header. just like we have been doing in postman
+//allows us to actually see the fish feed and send requests. because we have our token added to the authorization header of all requests
+axios.interceptors.request.use((config) => {
+  const token = window.localStorage.getItem('jwt');
+  if(token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+}, error => {
+  return Promise.reject(error);
+})
+
 //an interceptor to intercept errors coming back from the server
 axios.interceptors.response.use(undefined, error=>{
   //if it's a network error and our error.response is undefined, send a toast

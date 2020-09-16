@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import {Container} from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import FishCaughtDashboard from '../../features/fishCaught/dashboard/FishCaughtDashboard';
@@ -11,9 +11,26 @@ import FishDetails from '../../features/fishCaught/details/FishDetails';
 import NotFound from './NotFound';
 import {ToastContainer} from 'react-toastify';
 import LoginForm from '../../features/user/LoginForm';
+import { RootStoreContext } from '../stores/rootStore';
+import { LoadingComponent } from './LoadingComponent';
 
 //bringing in location as a prop so we can use it as a key on our FishForm route
 const App: React.FC<RouteComponentProps> = ({location}) => {
+  const rootStore = useContext(RootStoreContext);
+  const { setAppLoaded, token, appLoaded } = rootStore.commonStore;
+  const {getUser} = rootStore.userStore;
+
+  useEffect(() => {
+    //if we have a token, then we will get the user
+    if(token){
+      getUser().finally(() => setAppLoaded());
+    }else{
+      setAppLoaded();
+    }
+  }, [getUser, setAppLoaded, token])
+  
+  //if app is not loaded, then we show the loading component
+  if(!appLoaded) return <LoadingComponent content='Loading app...'/>
 
   return (
     <Fragment>
