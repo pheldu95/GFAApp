@@ -13,11 +13,9 @@ const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
       <Message.Header>{error.statusText}</Message.Header>
       {error.data && Object.keys(error.data.errors).length > 0 && (
         <Message.List>
-          {Object.values(error.data.errors)
-            .flat()
-            .map((err, i) => (
-              <Message.Item key={i}>error</Message.Item>
-            ))}
+          {Object.values(error.data.errors).flat().map((err, i)=>(
+            <Message.Item key = {i}>{error}</Message.Item>
+          ))}
         </Message.List>
       )}
       {text && <Message.Content content={text} />}
