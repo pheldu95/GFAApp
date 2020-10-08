@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 namespace Domain
 {
@@ -6,5 +7,6 @@ namespace Domain
     {
         //this is the name that will display in our application
         public string DisplayName { get; set; }
+        public ICollection<UserFish> UserFishCaught { get; set; }
     }
 }

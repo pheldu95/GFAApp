@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Domain
 {
@@ -24,6 +25,7 @@ namespace Domain
         public int WaterTemperature { get; set; }
         public DateTime CaughtDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public ICollection<UserFish> UserFishCaught { set; get; }
     }
 }
 
