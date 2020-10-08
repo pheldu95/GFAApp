@@ -3,6 +3,7 @@ import { Item, Divider, Header } from 'semantic-ui-react'
 import { observer } from "mobx-react-lite";
 import FishCaughtListItem from './FishCaughtListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import {format} from 'date-fns';
 
 const FishCaughtList: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
@@ -14,7 +15,8 @@ const FishCaughtList: React.FC = () => {
           <Fragment key={group}>
             <Divider horizontal>
               <Header as='h4'>
-                {group}
+                {/* formatting our date */}
+                {format(group, 'eeee do MMMM')}
               </Header>
             </Divider>
             {/* <Label size='large' color='blue'>
