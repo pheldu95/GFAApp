@@ -25,7 +25,9 @@ namespace Application.FishCaught
             public async Task<List<Fish>> Handle(Query request, CancellationToken cancellationToken)
             {
                 //gets all our fish from the db and returns them
-                var fishCaught = await _context.FishCaught.ToListAsync();
+                //we use .Include and .ThenInclude to also return the UserFIshCaught and APpUser
+                var fishCaught = await _context.FishCaught.Include(x => x.UserFishCaught)
+                .ThenInclude(x=> x.AppUser).ToListAsync();
                 return fishCaught;
             }
         }
