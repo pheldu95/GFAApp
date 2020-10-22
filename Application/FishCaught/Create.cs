@@ -2,9 +2,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.FishCaught
@@ -49,8 +51,10 @@ namespace Application.FishCaught
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _context = context;
             }
 
@@ -79,10 +83,26 @@ namespace Application.FishCaught
                 };
 
                 _context.FishCaught.Add(fish);
+
+                //get a user object for the current logged in user
+                var user = await _context.Users.SingleOrDefaultAsync(x => 
+                    x.UserName ==_userAccessor.GetCurrentUsername());
+                
+                //object for the person who liked the post? maybe
+                var liker = new UserFish
+                {
+                    AppUser = user,
+                    Fish = fish,
+                    Liked = true
+                };
+
+                //add the "liker" to our UserFishCaught
+                _context.UserFishCaught.Add(liker);
+
                 //if _context.SaveChangesAsync returns something greater than zero
                 //that means the fish was succesfully added.
                 var success = await _context.SaveChangesAsync() > 0;
-                if(success) return Unit.Value;
+                if (success) return Unit.Value;
 
                 //if request is unsuccessfull, we will throw an exception
                 throw new Exception("Problem saving changes");
