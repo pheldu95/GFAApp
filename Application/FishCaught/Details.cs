@@ -13,11 +13,11 @@ namespace Application.FishCaught
     //this will be for getting a single FishCaught
     public class Details
     {
-        public class Query : IRequest<Fish>
+        public class Query : IRequest<FishDto>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Fish>
+        public class Handler : IRequestHandler<Query, FishDto>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -25,7 +25,7 @@ namespace Application.FishCaught
                 _context = context;
             }
 
-            public async Task<Fish> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<FishDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var fish = await _context.FishCaught
                     .Include(x => x.UserFishCaught)
