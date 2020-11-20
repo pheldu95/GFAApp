@@ -26,7 +26,7 @@ namespace API.Controllers
         //method for a get request that calls our details handler
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<Fish>> Details(Guid id)
+        public async Task<ActionResult<FishDto>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query{Id = id});
         }

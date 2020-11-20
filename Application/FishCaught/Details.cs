@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +21,10 @@ namespace Application.FishCaught
         public class Handler : IRequestHandler<Query, FishDto>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IMapper _mapper;
+            public Handler(DataContext context, IMapper mapper)
             {
+                _mapper = mapper;
                 _context = context;
             }
 
@@ -36,7 +39,8 @@ namespace Application.FishCaught
                     //here is where we use our error handling that we made, RestException
                     throw new RestException(HttpStatusCode.NotFound, new { fish = "Not found" });
 
-                return fish;
+                var fishToReturn = _mapper.Map<Fish, FishDto>(fish);
+                return fishToReturn;
             }
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Application.FishCaught
 {
@@ -25,6 +26,9 @@ namespace Application.FishCaught
         public int WaterTemperature { get; set; }
         public DateTime CaughtDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
-       public ICollection<LikerDto> Likers { get; set; }
+        
+        //this will make it so it returns something called 'likers' instead of UserFIshCaught
+        [JsonPropertyName("likers")]
+        public ICollection<LikerDto> UserFishCaught { get; set; }
     }
 }
