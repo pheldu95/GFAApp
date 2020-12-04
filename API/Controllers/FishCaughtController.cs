@@ -17,7 +17,7 @@ namespace API.Controllers
         
 
         [HttpGet]
-        public async Task<ActionResult<List<Fish>>> List()
+        public async Task<ActionResult<List<FishDto>>> List()
         {
             //Mediator is coming from our BaseController class
             return await Mediator.Send(new List.Query());
